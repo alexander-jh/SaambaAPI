@@ -36,8 +36,6 @@ public class Songs {
     private void parseSongs(Track[] tracks, String a) {
         for(Track t : tracks) {
             songs.add(new Song(t.getName(), a));
-            System.out.println(a);
-            System.out.println(t.getName());
         }
     }
 }

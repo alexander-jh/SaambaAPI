@@ -10,6 +10,9 @@ public class Song {
         this.title = "";
         LyricScraper ls = new LyricScraper(a, title);
         this.lyrics = ls.getLyrics();
+        System.out.println(a);
+        System.out.println(this.title);
+        System.out.println(this.lyrics);
     }
 
     public String getTitle() { return title; }

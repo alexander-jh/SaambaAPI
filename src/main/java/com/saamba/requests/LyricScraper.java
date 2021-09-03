@@ -60,24 +60,16 @@ public class LyricScraper {
     }
 
     private String parseHTML(Document html) {
-        String lyrics = "";
+        StringBuilder lyrics = new StringBuilder();
 
         Elements first = html.select("div.lyrics");
-        Elements second = html.select("div.Lyrics__Container-sc-1ynbvzw-8 eOLwDW");
 
-        String one = "", two = "";
+        for(Element e : first) {
+            String text = e.text();
+            if(text.charAt(0) != '<')
+                lyrics.append(text);
+        }
 
-        for(Element e : first)
-            one = e.text();
-
-        for(Element e : second)
-            two = e.text();
-
-        if(one.length() > 0)
-            lyrics = one;
-        else if(two.length() > 0)
-            lyrics = two;
-
-        return lyrics;
+        return lyrics.toString();
     }
 }
