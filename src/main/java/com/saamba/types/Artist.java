@@ -1,6 +1,8 @@
 package com.saamba.types;
 
 import com.saamba.requests.Songs;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +19,16 @@ public class Artist {
     }
 
     public String getName() { return this.name; }
+
+    public JSONObject getJSON() {
+        JSONObject json = new JSONObject();
+        JSONArray jSongs = new JSONArray();
+        for(Song s : songs)
+            jSongs.add(s.toJSON());
+        json.put("Name", name);
+        json.put("Songs", jSongs);
+        return json;
+    }
 
     private void getMostPopularSongs(String id) {
         Set<Song> songResults = (new Songs(this.name, id)).getSongs();

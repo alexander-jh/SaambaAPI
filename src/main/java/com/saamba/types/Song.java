@@ -1,6 +1,7 @@
 package com.saamba.types;
 
 import com.saamba.requests.LyricScraper;
+import org.json.simple.JSONObject;
 
 public class Song {
     private final String title;
@@ -10,14 +11,17 @@ public class Song {
         this.title = "";
         LyricScraper ls = new LyricScraper(a, title);
         this.lyrics = ls.getLyrics();
-        System.out.println(a);
-        System.out.println(this.title);
-        System.out.println(this.lyrics);
     }
 
     public String getTitle() { return title; }
 
     public String getLyrics() {
         return lyrics;
+    }
+
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+        json.put(title, lyrics);
+        return json;
     }
 }
