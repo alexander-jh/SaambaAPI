@@ -23,9 +23,14 @@ public class Genre {
     public JSONObject toJSON() {
         JSONObject json = new JSONObject();
         JSONArray jArtists = new JSONArray();
-        for(Artist a : artists)
-            jArtists.add(a.getJSON());
-        json.put("Artists", jArtists);
+
+        for(Artist a : artists) {
+            JSONObject aj = a.getJSON();
+            if(!aj.isEmpty()) jArtists.add(aj);
+        }
+
+        if(!jArtists.isEmpty()) json.put("Artists", jArtists);
+
         return json;
     }
 

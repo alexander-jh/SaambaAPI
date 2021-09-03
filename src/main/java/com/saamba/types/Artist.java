@@ -23,12 +23,18 @@ public class Artist {
     public JSONObject getJSON() {
         JSONObject json = new JSONObject();
         JSONArray jSongs = new JSONArray();
-        for(Song s : songs)
-            jSongs.add(s.toJSON());
-        json.put("Name", name);
-        json.put("Songs", jSongs);
+        for(Song s : songs) {
+            if(s.getTitle().length() > 0 && s.getLyrics().length() > 0)
+                jSongs.add(s.toJSON());
+        }
+        if(!jSongs.isEmpty() && name.length() > 0) {
+            json.put("Name", name);
+            json.put("Songs", jSongs);
+        }
         return json;
     }
+
+    public int songCount() { return songs.size(); }
 
     private void getMostPopularSongs(String id) {
         Set<Song> songResults = (new Songs(this.name, id)).getSongs();

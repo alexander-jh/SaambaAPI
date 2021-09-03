@@ -8,7 +8,7 @@ public class Song {
     private final String lyrics;
 
     public Song(String title, String a) {
-        this.title = "";
+        this.title = title;
         LyricScraper ls = new LyricScraper(a, title);
         this.lyrics = ls.getLyrics();
     }
@@ -21,7 +21,10 @@ public class Song {
 
     public JSONObject toJSON() {
         JSONObject json = new JSONObject();
-        json.put(title, lyrics);
+        if(title.length() > 0 && lyrics.length() > 0) {
+            json.put("Title", title);
+            json.put("Lyrics", lyrics);
+        }
         return json;
     }
 }

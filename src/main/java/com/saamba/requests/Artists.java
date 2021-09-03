@@ -25,7 +25,6 @@ public class Artists {
                     .getRecommendations()
                     .limit(Constants.RECOMMENDATION_LIMIT)
                     .max_popularity(Constants.POPULARITY_LIMIT)
-                    .min_popularity(Constants.POPULARITY_FLOOR)
                     .seed_genres(c)
                     .build()
                     .execute();

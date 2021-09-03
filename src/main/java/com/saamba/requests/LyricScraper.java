@@ -1,6 +1,8 @@
 package com.saamba.requests;
 
 import com.saamba.helpers.Constants;
+import com.saamba.helpers.SaambaLog;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -10,6 +12,7 @@ import java.io.IOException;
 
 public class LyricScraper {
 
+    private final SaambaLog logger = new SaambaLog(this.getClass());
     private final String artist;
     private final String title;
 
@@ -19,18 +22,16 @@ public class LyricScraper {
     }
 
     public String getLyrics() {
-        Document html = null;
-        String lyrics = "";
+        Document html;
 
         try {
             html = getHTML();
         } catch(IOException e) {
-            System.out.println("Error: " + e.getMessage());
+            logger.warn(e.getMessage());
+            html = null;
         }
 
-        if(html != null) lyrics = parseHTML(html);
-
-        return lyrics;
+        return (html != null) ? parseHTML(html) : "";
     }
 
     private Document getHTML() throws IOException {

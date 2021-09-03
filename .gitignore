@@ -1,2 +1,10 @@
 .idea/*
 target/*
+
+# Exclude logs and json directories with contents
+logs/*
+json/*
+
+# Include only directories
+!logs/.gitkeep
+!json/.gitkeep
