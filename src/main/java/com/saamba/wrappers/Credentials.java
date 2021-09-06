@@ -1,15 +1,13 @@
 package com.saamba.wrappers;
 
+import java.io.IOException;
+
+import org.apache.hc.core5.http.ParseException;
+
 import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 import com.wrapper.spotify.model_objects.credentials.ClientCredentials;
 import com.wrapper.spotify.requests.authorization.client_credentials.ClientCredentialsRequest;
-import org.apache.hc.core5.http.ParseException;
-
-import java.io.IOException;
-import java.util.concurrent.CancellationException;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
 
 public class Credentials {
     // TODO: Decouple credential artifacts
@@ -17,17 +15,16 @@ public class Credentials {
     private static final String clientSecret = "d7020609582a48bcb7d31697c59ff147";
 
     private static final SpotifyApi api = new SpotifyApi.Builder()
-        .setClientId(clientId)
-        .setClientSecret(clientSecret)
-        .build();
+            .setClientId(clientId).setClientSecret(clientSecret).build();
 
-    private static final ClientCredentialsRequest credentialRequest = api.clientCredentials()
-            .build();
+    private static final ClientCredentialsRequest credentialRequest = api
+            .clientCredentials().build();
 
     public static String getAccessToken() {
         String accessToken = "";
         try {
-            final ClientCredentials clientCredentials = credentialRequest.execute();
+            final ClientCredentials clientCredentials = credentialRequest
+                    .execute();
             accessToken = clientCredentials.getAccessToken();
         } catch (IOException | SpotifyWebApiException | ParseException e) {
             System.out.println("Error: " + e.getMessage());
