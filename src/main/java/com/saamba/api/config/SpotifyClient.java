@@ -8,16 +8,20 @@ import com.saamba.api.enums.ClientTypes;
 import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 
+import com.wrapper.spotify.model_objects.credentials.ClientCredentials;
 import com.wrapper.spotify.model_objects.specification.ArtistSimplified;
 import com.wrapper.spotify.model_objects.specification.Recommendations;
 import com.wrapper.spotify.model_objects.specification.TrackSimplified;
+import com.wrapper.spotify.requests.authorization.client_credentials.ClientCredentialsRequest;
 import com.wrapper.spotify.requests.data.browse.miscellaneous.GetAvailableGenreSeedsRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import org.apache.hc.core5.http.ParseException;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -27,11 +31,11 @@ import java.util.Set;
 @Component
 public class SpotifyClient implements ClientConfig {
 
-    @Value("${client.spotify.accesskey}")
-    private String accessKey;
-
     @Value("${client.spotify.secretkey}")
     private String secretKey;
+
+    @Value("${client.spotify.accesskey}")
+    private String accessKey;
 
     @Value("${client.spotify.recommendation.limit}")
     private int recLimit;
@@ -42,10 +46,11 @@ public class SpotifyClient implements ClientConfig {
     @Value("${client.spotify.popularity.min}")
     private int popMin;
 
-    private final SpotifyApi spotifyClient = new SpotifyApi.Builder()
-            .setClientId(accessKey)
-            .setClientSecret(secretKey)
-            .build();
+    private SpotifyApi spotifyClient;
+
+    public SpotifyClient() {
+
+    }
 
     @Override
     public void refreshCredentials() {
@@ -55,13 +60,19 @@ public class SpotifyClient implements ClientConfig {
     @Override
     public ClientTypes getClientType() { return ClientTypes.Spotify; }
 
-    public SpotifyClient() {
+    @Autowired
+    public SpotifyClient(@Value("${client.spotify.secretkey}") String secretKey,
+                         @Value("${client.spotify.accesskey}") String accessKey) {
+        spotifyClient = new SpotifyApi.Builder()
+                .setClientId(accessKey)
+                .setClientSecret(secretKey)
+                .build();
         String accessToken = "";
         try {
-            accessToken = spotifyClient.clientCredentials()
-                    .build()
-                    .execute()
-                    .getAccessToken();
+            ClientCredentialsRequest cr = spotifyClient.clientCredentials()
+                    .build();
+            ClientCredentials cred = cr.execute();
+            accessToken = cred.getAccessToken();
         } catch(IOException | SpotifyWebApiException | ParseException e) {
             System.out.println("Error: " + e.getMessage());
         }

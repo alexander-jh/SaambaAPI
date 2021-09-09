@@ -20,7 +20,7 @@ public class SaambaApplication {
     @Resource(name = "music")
     private MusicRepository musicRepo;
 
-    @PostMapping("/updateMusic")
+    @GetMapping("/updateMusic")
     public String updateMusic() { return musicRepo.updateMusic(); }
 
     @PostMapping("/saveUser")

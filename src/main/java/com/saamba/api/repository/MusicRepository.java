@@ -31,7 +31,7 @@ public class MusicRepository {
     @Value("${utils.thread.max}")
     private int threadMax;
 
-    @Resource(name="spotify")
+    @Autowired
     SpotifyClient spotify;
 
     public String updateMusic() {
