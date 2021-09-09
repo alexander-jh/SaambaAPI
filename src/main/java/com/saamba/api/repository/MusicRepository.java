@@ -2,9 +2,12 @@ package com.saamba.api.repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saamba.api.config.SpotifyClient;
+
 import com.saamba.api.dao.Artist;
 import com.saamba.api.dao.Genre;
+import com.saamba.api.utils.ThreadPool;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
@@ -18,10 +21,19 @@ public class MusicRepository {
     @Resource(name="spotify")
     SpotifyClient spotify;
 
+    @Autowired
+    ThreadPool threadPool;
+
     public String updateMusic() {
         String[] genres = spotify.getGenres();
         for (String g : genres)
-            genreToJSON(makeGenre(g));
+            try {
+                threadPool.execute(() -> {
+                    genreToJSON(makeGenre(g));
+                });
+            } catch(Exception e) {
+                System.out.println(e.getMessage());
+            }
 
         return "music updates completed";
     }
