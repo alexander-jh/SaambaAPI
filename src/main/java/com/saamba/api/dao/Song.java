@@ -1,9 +1,9 @@
 package com.saamba.api.dao;
 
-import com.saamba.api.service.LyricsFactory;
 import com.wrapper.spotify.model_objects.specification.TrackSimplified;
 
 public class Song {
+
     private final String id;
     private final String title;
     private final String uri;
@@ -13,7 +13,7 @@ public class Song {
         this.id = track.getId();
         this.title = track.getName();
         this.uri = track.getUri();
-        setLyrics(track);
+        this.lyrics = "";
     }
 
     public String getId() { return this.id; }
@@ -24,12 +24,7 @@ public class Song {
 
     public String getLyrics() { return this.lyrics; }
 
-    private void setLyrics(TrackSimplified track) {
-        LyricsFactory factory = new LyricsFactory();
-        this.lyrics = factory
-                .create(track.getName(), track.getArtists()[0].getName())
-                .getLyrics();
-    }
+    public void setLyrics(String lyrics) { this.lyrics = lyrics; }
 
     @Override
     public String toString() {

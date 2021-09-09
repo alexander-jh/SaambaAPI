@@ -14,7 +14,6 @@ import com.wrapper.spotify.model_objects.specification.TrackSimplified;
 import com.wrapper.spotify.requests.data.browse.miscellaneous.GetAvailableGenreSeedsRequest;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import org.apache.hc.core5.http.ParseException;
@@ -26,22 +25,21 @@ import java.util.Iterator;
 import java.util.Set;
 
 @Component
-@ConfigurationProperties(prefix = "client.spotify")
 public class SpotifyClient implements ClientConfig {
 
-    @Value("${accesskey}")
+    @Value("${client.spotify.accesskey}")
     private String accessKey;
 
-    @Value("${secretkey}")
+    @Value("${client.spotify.secretkey}")
     private String secretKey;
 
-    @Value("${recommendation.limit")
+    @Value("${client.spotify.recommendation.limit}")
     private int recLimit;
 
-    @Value("${popularity.limit")
+    @Value("${client.spotify.popularity.limit}")
     private int popMax;
 
-    @Value("${popularity.min")
+    @Value("${client.spotify.popularity.min}")
     private int popMin;
 
     private final SpotifyApi spotifyClient = new SpotifyApi.Builder()

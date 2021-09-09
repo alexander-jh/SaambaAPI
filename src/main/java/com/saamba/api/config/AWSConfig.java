@@ -12,13 +12,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConfigurationProperties(prefix = "client.aws")
 public class AWSConfig implements  ClientConfig {
 
-    @Value("${accesskey}")
+    @Value("${client.aws.accesskey}")
     private String accessKey;
 
-    @Value("${secretkey}")
+    @Value("${client.aws.secretkey}")
     private String secretKey;
 
     @Override

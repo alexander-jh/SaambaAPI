@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-@Component
 public class ThreadPool {
 
     @Value("${utils.task.max}")
@@ -22,7 +21,7 @@ public class ThreadPool {
     private boolean isStopped;
 
     public ThreadPool() {
-        tasks = new ArrayBlockingQueue<Runnable>(taskMax);
+        tasks = new ArrayBlockingQueue<>(taskMax);
         for(int i = 0; i < threadMax; ++i) {
             Task task = new Task(tasks);
             runnables.add(new Task(tasks));

@@ -4,7 +4,7 @@ import java.util.concurrent.BlockingQueue;
 
 public class Task implements Runnable {
     private Thread thread = null;
-    private BlockingQueue tasks = null;
+    private BlockingQueue tasks;
     private boolean isStopped = false;
 
     public Task(BlockingQueue q) {

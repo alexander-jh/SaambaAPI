@@ -8,14 +8,16 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
+
 @SpringBootApplication
 @RestController
 public class SaambaApplication {
 
-    @Autowired
+    @Resource(name = "user")
     private UserRepository entityRepo;
 
-    @Autowired
+    @Resource(name = "music")
     private MusicRepository musicRepo;
 
     @PostMapping("/updateMusic")
