@@ -10,17 +10,11 @@ import java.util.concurrent.BlockingQueue;
 
 public class ThreadPool {
 
-    @Value("${utils.task.max}")
-    private int taskMax;
-
-    @Value("${utils.thread.max}")
-    private int threadMax;
-
     private BlockingQueue<Runnable> tasks;
     private List<Task> runnables = new ArrayList<>();
     private boolean isStopped;
 
-    public ThreadPool() {
+    public ThreadPool(int taskMax, int threadMax) {
         tasks = new ArrayBlockingQueue<>(taskMax);
         for(int i = 0; i < threadMax; ++i) {
             Task task = new Task(tasks);

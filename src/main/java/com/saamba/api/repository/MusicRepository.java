@@ -22,16 +22,20 @@ import java.io.IOException;
 @Repository("music")
 public class MusicRepository {
 
-    @Resource(name="spotify")
-    SpotifyClient spotify;
-
     @Value("${client.genius.accesstoken}")
     private String geniusToken;
 
-//    @Autowired
-//    ThreadPool threadPool;
+    @Value("${utils.task.max}")
+    private int taskMax;
+
+    @Value("${utils.thread.max}")
+    private int threadMax;
+
+    @Resource(name="spotify")
+    SpotifyClient spotify;
 
     public String updateMusic() {
+        //    ThreadPool threadPool = new ThreadPool(taskMax, threadMax);
         String[] genres = spotify.getGenres();
         for (String g : genres)
 //            try {
