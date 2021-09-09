@@ -1,4 +1,4 @@
-from com.saamba.api.dao import LyricType
+from com.saamba.api.jython import LyricType
 import lyricsgenius
 
 class LyricDownloader:

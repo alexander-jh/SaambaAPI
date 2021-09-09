@@ -1,6 +1,6 @@
 package com.saamba.api.service;
 
-import com.saamba.api.dao.LyricType;
+import com.saamba.api.jython.LyricType;
 
 import org.python.core.PyObject;
 
