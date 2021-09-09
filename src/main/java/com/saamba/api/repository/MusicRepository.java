@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saamba.api.config.SpotifyClient;
 import com.saamba.api.dao.Artist;
 import com.saamba.api.dao.Genre;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Repository;
+
+import javax.annotation.Resource;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +15,7 @@ import java.io.IOException;
 @Repository
 public class MusicRepository {
 
-    @Autowired
+    @Resource(name="spotify")
     SpotifyClient spotify;
 
     public String updateMusic() {

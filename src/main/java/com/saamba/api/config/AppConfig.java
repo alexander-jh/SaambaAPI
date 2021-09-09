@@ -7,12 +7,12 @@ import org.springframework.context.annotation.Configuration;
 public class AppConfig {
 
     @Bean("spotify")
-    public ClientConfig spotifyAPI() { return new SpotifyClient(); }
+    public SpotifyClient spotifyAPI() { return new SpotifyClient(); }
 
     @Bean("ibm")
-    public ClientConfig ibmAPI() { return new IBMClient(); }
+    public IBMClient ibmAPI() { return new IBMClient(); }
 
     @Bean("aws")
-    public ClientConfig awsAPI() {return new AWSConfig(); }
+    public AWSConfig awsAPI() {return new AWSConfig(); }
 
 }
