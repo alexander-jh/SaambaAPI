@@ -2,6 +2,8 @@ package com.saamba.api.config;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.RegionUtils;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
@@ -20,6 +22,9 @@ public class AWSConfig implements  ClientConfig {
     @Value("${client.aws.secretkey}")
     private String secretKey;
 
+    @Value("${region.aws.default}")
+    private String region;
+
     @Override
     public ClientTypes getClientType() { return ClientTypes.AWS; };
 
@@ -33,6 +38,10 @@ public class AWSConfig implements  ClientConfig {
 
     private AmazonDynamoDB amazonDynamoDBConfig() {
         return AmazonDynamoDBClientBuilder.standard()
-                .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey))).build();
+                .withCredentials(
+                        new AWSStaticCredentialsProvider(
+                            new BasicAWSCredentials(accessKey, secretKey)))
+                .withRegion(RegionUtils.getRegion(region).toString())
+                .build();
     }
 }

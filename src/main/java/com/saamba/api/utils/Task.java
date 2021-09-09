@@ -4,10 +4,10 @@ import java.util.concurrent.BlockingQueue;
 
 public class Task implements Runnable {
     private Thread thread = null;
-    private BlockingQueue tasks;
+    private final BlockingQueue<Runnable> tasks;
     private boolean isStopped = false;
 
-    public Task(BlockingQueue q) {
+    public Task(BlockingQueue<Runnable> q) {
         tasks = q;
     }
 
@@ -15,7 +15,7 @@ public class Task implements Runnable {
         this.thread = Thread.currentThread();
         while(!isStopped()) {
             try {
-                Runnable runnable = (Runnable) tasks.take();
+                Runnable runnable = tasks.take();
                 runnable.run();
             } catch(Exception e) {
                 System.out.println("Error: " + e.getMessage());

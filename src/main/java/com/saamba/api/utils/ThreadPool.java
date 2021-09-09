@@ -1,8 +1,5 @@
 package com.saamba.api.utils;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -10,8 +7,8 @@ import java.util.concurrent.BlockingQueue;
 
 public class ThreadPool {
 
-    private BlockingQueue<Runnable> tasks;
-    private List<Task> runnables = new ArrayList<>();
+    private final BlockingQueue<Runnable> tasks;
+    private final List<Task> runnables = new ArrayList<>();
     private boolean isStopped;
 
     public ThreadPool(int taskMax, int threadMax) {

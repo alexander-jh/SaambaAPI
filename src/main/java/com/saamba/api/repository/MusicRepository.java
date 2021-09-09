@@ -6,15 +6,12 @@ import com.saamba.api.config.SpotifyClient;
 import com.saamba.api.dao.Artist;
 import com.saamba.api.dao.Genre;
 import com.saamba.api.dao.Song;
-import com.saamba.api.jython.LyricType;
 import com.saamba.api.service.LyricsFactory;
 import com.saamba.api.utils.ThreadPool;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
-
-import javax.annotation.Resource;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,17 +32,16 @@ public class MusicRepository {
     SpotifyClient spotify;
 
     public String updateMusic() {
-        //    ThreadPool threadPool = new ThreadPool(taskMax, threadMax);
+        ThreadPool threadPool = new ThreadPool(taskMax, threadMax);
         String[] genres = spotify.getGenres();
         for (String g : genres)
-//            try {
-//                threadPool.execute(() -> {
-            genreToJSON(makeGenre(g));
-//                });
-//            } catch(Exception e) {
-//                System.out.println(e.getMessage());
-//            }
-
+            try {
+                threadPool.execute(() -> genreToJSON(makeGenre(g)));
+            } catch(Exception e) {
+                System.out.println(e.getMessage());
+            }
+        threadPool.waitForCompletion();
+        threadPool.stop();
         return "music updates completed";
     }
 
@@ -55,10 +51,9 @@ public class MusicRepository {
         for(Artist a : genre.getArtists()) {
             LyricsFactory factory = new LyricsFactory();
             a.setSongs(spotify.getSongs(a));
-            for(Song s : a.getSongs()) {
-                LyricType pyObj = factory.create(geniusToken, a.getName(), s.getTitle());
-                s.setLyrics(pyObj.getLyrics());
-            }
+            for(Song s : a.getSongs())
+                s.setLyrics(factory.processLyrics(geniusToken,
+                        a.getName(), s.getTitle()));
         }
         return genre;
     }

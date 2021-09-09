@@ -23,10 +23,7 @@ import org.apache.hc.core5.http.ParseException;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 @Component
 public class SpotifyClient implements ClientConfig {
@@ -48,9 +45,7 @@ public class SpotifyClient implements ClientConfig {
 
     private SpotifyApi spotifyClient;
 
-    public SpotifyClient() {
-
-    }
+    public SpotifyClient() { }
 
     @Override
     public void refreshCredentials() {
@@ -60,23 +55,23 @@ public class SpotifyClient implements ClientConfig {
     @Override
     public ClientTypes getClientType() { return ClientTypes.Spotify; }
 
-    @Autowired
-    public SpotifyClient(@Value("${client.spotify.secretkey}") String secretKey,
-                         @Value("${client.spotify.accesskey}") String accessKey) {
+    @PostConstruct
+    public SpotifyClient init() {
         spotifyClient = new SpotifyApi.Builder()
                 .setClientId(accessKey)
                 .setClientSecret(secretKey)
                 .build();
         String accessToken = "";
         try {
-            ClientCredentialsRequest cr = spotifyClient.clientCredentials()
-                    .build();
-            ClientCredentials cred = cr.execute();
-            accessToken = cred.getAccessToken();
+            accessToken = spotifyClient.clientCredentials()
+                    .build()
+                    .execute()
+                    .getAccessToken();
         } catch(IOException | SpotifyWebApiException | ParseException e) {
             System.out.println("Error: " + e.getMessage());
         }
         spotifyClient.setAccessToken(accessToken);
+        return this;
     }
 
     public String[] getGenres() {
@@ -109,14 +104,12 @@ public class SpotifyClient implements ClientConfig {
                         uniqueArtists::add
                 );
 
-            artists = new Artist[uniqueArtists.size()];
+            List<Artist> tmp = new ArrayList<>();
 
-            Iterator<ArtistSimplified> it = uniqueArtists.iterator();
-            for(int i = 0; !uniqueArtists.isEmpty(); ++i) {
-                ArtistSimplified a = it.next();
-                artists[i] = new Artist(a);
-                uniqueArtists.remove(a);
-            }
+            for(ArtistSimplified a : uniqueArtists)
+                tmp.add(new Artist(a));
+
+            artists = tmp.toArray(artists);
 
         } catch (IOException | SpotifyWebApiException | ParseException e) {
             System.out.println("Error: " + e.getMessage());
