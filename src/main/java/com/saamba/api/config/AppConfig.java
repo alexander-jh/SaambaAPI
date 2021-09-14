@@ -13,6 +13,9 @@ public class AppConfig {
     public IBMClient ibmAPI() { return new IBMClient(); }
 
     @Bean("aws")
-    public AWSConfig awsAPI() {return new AWSConfig(); }
+    public AWSConfig awsAPI() { return new AWSConfig(); }
+
+    @Bean("musix")
+    public MusixMatchClient musixAPI() { return new MusixMatchClient(); }
 
 }

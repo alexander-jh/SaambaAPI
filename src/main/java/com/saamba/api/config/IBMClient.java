@@ -12,8 +12,8 @@ public class IBMClient implements ClientConfig {
     private String accessKey;
 
     @Override
-    public ClientTypes getClientType() { return ClientTypes.IBM; };
+    public ClientTypes getClientType() { return ClientTypes.IBM; }
 
     @Override
-    public void refreshCredentials() {};
+    public void refreshCredentials() {}
 }

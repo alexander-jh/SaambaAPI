@@ -1,6 +1,6 @@
 package com.saamba.api.dao;
 
-import com.wrapper.spotify.model_objects.specification.TrackSimplified;
+import com.wrapper.spotify.model_objects.specification.Track;
 
 public class Song {
 
@@ -9,7 +9,7 @@ public class Song {
     private final String uri;
     private String lyrics;
 
-    public Song(TrackSimplified track) {
+    public Song(Track track) {
         this.id = track.getId();
         this.title = track.getName();
         this.uri = track.getUri();

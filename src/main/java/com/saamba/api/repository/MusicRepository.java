@@ -1,26 +1,24 @@
 package com.saamba.api.repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.saamba.api.config.MusixMatchClient;
 import com.saamba.api.config.SpotifyClient;
 
 import com.saamba.api.dao.Artist;
 import com.saamba.api.dao.Genre;
 import com.saamba.api.dao.Song;
-import com.saamba.api.service.LyricsFactory;
 import com.saamba.api.utils.ThreadPool;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
-import java.io.File;
+import javax.annotation.Resource;
+
 import java.io.IOException;
+import java.nio.file.Paths;
 
 @Repository("music")
 public class MusicRepository {
-
-    @Value("${client.genius.accesstoken}")
-    private String geniusToken;
 
     @Value("${utils.task.max}")
     private int taskMax;
@@ -28,8 +26,11 @@ public class MusicRepository {
     @Value("${utils.thread.max}")
     private int threadMax;
 
-    @Autowired
+    @Resource(name="spotify")
     SpotifyClient spotify;
+
+    @Resource(name="musix")
+    MusixMatchClient musixMatch;
 
     public String updateMusic() {
         ThreadPool threadPool = new ThreadPool(taskMax, threadMax);
@@ -49,11 +50,12 @@ public class MusicRepository {
         Genre genre = new Genre(g);
         genre.setArtists(spotify.getArtists(genre));
         for(Artist a : genre.getArtists()) {
-            LyricsFactory factory = new LyricsFactory();
-            a.setSongs(spotify.getSongs(a));
-            for(Song s : a.getSongs())
-                s.setLyrics(factory.processLyrics(geniusToken,
-                        a.getName(), s.getTitle()));
+            Song[] songs = spotify.getSongs(a);
+            for(Song s : songs) {
+                String lyrics = musixMatch.getLyrics(a.getName(), s.getTitle());
+                if(lyrics.length() > 0) s.setLyrics(lyrics);
+            }
+            a.setSongs(songs);
         }
         return genre;
     }
@@ -62,7 +64,7 @@ public class MusicRepository {
         ObjectMapper mapper = new ObjectMapper();
         String fileName = "json/" + g.getGenre() + ".json";
         try {
-            mapper.writeValue(new File(fileName), g);
+            mapper.writeValue(Paths.get(fileName).toFile(), g);
         } catch(IOException e) {
             System.out.println(e.getMessage());
         }

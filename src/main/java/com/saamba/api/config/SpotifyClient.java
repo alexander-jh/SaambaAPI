@@ -1,5 +1,6 @@
 package com.saamba.api.config;
 
+import com.neovisionaries.i18n.CountryCode;
 import com.saamba.api.dao.Artist;
 import com.saamba.api.dao.Genre;
 import com.saamba.api.dao.Song;
@@ -11,6 +12,7 @@ import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 import com.wrapper.spotify.model_objects.credentials.ClientCredentials;
 import com.wrapper.spotify.model_objects.specification.ArtistSimplified;
 import com.wrapper.spotify.model_objects.specification.Recommendations;
+import com.wrapper.spotify.model_objects.specification.Track;
 import com.wrapper.spotify.model_objects.specification.TrackSimplified;
 import com.wrapper.spotify.requests.authorization.client_credentials.ClientCredentialsRequest;
 import com.wrapper.spotify.requests.data.browse.miscellaneous.GetAvailableGenreSeedsRequest;
@@ -42,6 +44,8 @@ public class SpotifyClient implements ClientConfig {
 
     @Value("${client.spotify.popularity.min}")
     private int popMin;
+
+    private static final CountryCode countryCode = CountryCode.US;
 
     private SpotifyApi spotifyClient;
 
@@ -120,18 +124,14 @@ public class SpotifyClient implements ClientConfig {
     public Song[] getSongs(Artist artist) {
         Song[] songs = {};
         try {
-            Recommendations recommendations = spotifyClient.getRecommendations()
-                    .seed_artists(artist.getId())
-                    .limit(recLimit)
-                    .max_popularity(popMax)
-                    .min_popularity(popMin)
+            Track[] tracks = spotifyClient.getArtistsTopTracks(artist.getId(), countryCode)
                     .build()
                     .execute();
 
-            songs = new Song[recommendations.getTracks().length];
+            songs = new Song[tracks.length];
 
             for(int i = 0; i < songs.length; ++i)
-                songs[i] = new Song(recommendations.getTracks()[i]);
+                songs[i] = new Song(tracks[i]);
 
         } catch (IOException | SpotifyWebApiException | ParseException e) {
             System.out.println("Error: " + e.getMessage());

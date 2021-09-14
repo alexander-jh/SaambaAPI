@@ -5,6 +5,7 @@ import com.wrapper.spotify.model_objects.specification.ArtistSimplified;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Artist {
 
@@ -28,7 +29,9 @@ public class Artist {
 
     public Song[] getSongs() { return this.songs.toArray(new Song[0]); }
 
-    public void setSongs(Song[] s) { this.songs = Arrays.asList(s); }
+    public void setSongs(Song[] s) {
+        this.songs.addAll(Arrays.asList(s));
+    }
 
     @Override
     public String toString() {

@@ -17,7 +17,10 @@ public class Genre {
 
     public List<Artist> getArtists() { return this.artists; }
 
-    public void setArtists(Artist[] artists) { this.artists = Arrays.asList(artists); }
+    public void setArtists(Artist[] artists) {
+        for(Artist a : artists)
+            if(a.getName().length() > 0) this.artists.add(a);
+    }
 
     @Override
     public String toString() {
