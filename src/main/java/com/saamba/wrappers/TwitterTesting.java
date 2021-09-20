@@ -2,6 +2,7 @@ package com.saamba.wrappers;
 
 import io.github.redouane59.twitter.TwitterClient;
 import io.github.redouane59.twitter.dto.endpoints.AdditionalParameters;
+import io.github.redouane59.twitter.dto.tweet.Tweet;
 import io.github.redouane59.twitter.dto.tweet.TweetList;
 import io.github.redouane59.twitter.dto.user.User;
 import io.github.redouane59.twitter.signature.TwitterCredentials;
@@ -27,7 +28,13 @@ public class TwitterTesting {
                 .recursiveCall(false).maxResults(RESULTS_TO_PULL).build();
         TweetList t = twitterClient.getUserTimeline(u.getId(), ap);
         return t;
+    }
 
+    public static String getPinnedTweet(String username) {
+        User u = twitterClient.getUserFromUserName(username);
+        Tweet t = u.getPinnedTweet();
+        String str = t.getText();
+        return str;
     }
 
     /*
@@ -36,7 +43,7 @@ public class TwitterTesting {
      * .accessToken(twitterAccessToken)
      * .accessTokenSecret(twitterAccessTokenSecret)
      * .apiKey(twitterAPIKey).apiSecretKey(twitterAPISecret).build());
-     * 
+     *
      * User ye = twitterClient.getUserFromUserName("kanyewest");
      * System.out.println(ye.getFollowersCount()); //
      * System.out.println(ye.getPinnedTweet().getText()); AdditionalParameters
@@ -45,7 +52,7 @@ public class TwitterTesting {
      * twitterClient.getUserTimeline(ye.getId(), ap); List<TweetData> td =
      * t.getData(); for (int i = 0; i < 15; i++) {
      * System.out.println(td.get(i).getText()); }
-     * 
+     *
      * }
      */
 }
