@@ -34,25 +34,28 @@ public class MusixMatchClient implements ClientConfig {
     public void refreshCredentials() { }
 
     public String getLyrics(String artist, String song) {
-        try {
-            Track track = musixClient.getMatchingTrack(song, artist);
-            TrackData data = track.getTrack();
-            int trackID = data.getTrackId();
-            Lyrics l = musixClient.getLyrics(trackID);
-            return l.getLyricsBody();
-        } catch(MusixMatchException e) {
+        //try {
+            int trackID = getTrackId(song, artist);
+            if(trackID != -1) {
+                //Lyrics l = musixClient.getLyrics(trackID);
+                //return l.getLyricsBody();
+                return "" + trackID;
+            }
+        //} catch(MusixMatchException e) {
             //System.out.println("Error: " + e.getMessage());
-        }
+        //}
         return "";
     }
 
-    private TrackData getTrack(String artist, String song) {
-        TrackData td = null;
+    private int getTrackId(String artist, String song) {
+        int id = -1;
         try {
-            td = musixClient.getMatchingTrack(song, artist).getTrack();
+            Track track = musixClient.getMatchingTrack(song, artist);
+            TrackData data = track.getTrack();
+            id = data.getTrackId();
         } catch(MusixMatchException e) {
             System.out.println("Error: " + e.getMessage());
         }
-        return td;
+        return id;
     }
 }

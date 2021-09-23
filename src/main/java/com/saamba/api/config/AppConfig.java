@@ -17,5 +17,4 @@ public class AppConfig {
 
     @Bean("musix")
     public MusixMatchClient musixAPI() { return new MusixMatchClient(); }
-
 }

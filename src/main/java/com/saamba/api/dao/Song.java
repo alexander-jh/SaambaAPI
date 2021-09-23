@@ -1,6 +1,10 @@
 package com.saamba.api.dao;
 
-import com.wrapper.spotify.model_objects.specification.Track;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.wrapper.spotify.model_objects.specification.ArtistSimplified;
+import com.wrapper.spotify.model_objects.specification.TrackSimplified;
 
 public class Song {
 
@@ -8,13 +12,19 @@ public class Song {
     private final String title;
     private final String uri;
     private String lyrics;
+    private List<String> artists;
 
-    public Song(Track track) {
+    public Song(TrackSimplified track) {
+        this.artists = new ArrayList<>();
         this.id = track.getId();
         this.title = track.getName();
         this.uri = track.getUri();
+        for(ArtistSimplified a : track.getArtists())
+            this.artists.add(a.getName());
         this.lyrics = "";
     }
+
+    public List<String> getArtists() { return this.artists; }
 
     public String getId() { return this.id; }
 

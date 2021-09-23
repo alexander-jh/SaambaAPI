@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saamba.api.config.MusixMatchClient;
 import com.saamba.api.config.SpotifyClient;
 
-import com.saamba.api.dao.Artist;
 import com.saamba.api.dao.Genre;
 import com.saamba.api.dao.Song;
 import com.saamba.api.utils.ThreadPool;
@@ -30,32 +29,30 @@ public class MusicRepository {
     SpotifyClient spotify;
 
     @Resource(name="musix")
-    MusixMatchClient musixMatch;
+    MusixMatchClient musix;
 
     public String updateMusic() {
         ThreadPool threadPool = new ThreadPool(taskMax, threadMax);
         String[] genres = spotify.getGenres();
         for (String g : genres)
-            try {
-                threadPool.execute(() -> genreToJSON(makeGenre(g)));
-            } catch(Exception e) {
-                System.out.println(e.getMessage());
-            }
-        threadPool.waitForCompletion();
-        threadPool.stop();
+            genreToJSON(makeGenre(g));
+//            try {
+//                threadPool.execute(() -> genreToJSON(makeGenre(g)));
+//            } catch(Exception e) {
+//                System.out.println(e.getMessage());
+//            }
+//        threadPool.waitForCompletion();
+//        threadPool.stop();
         return "music updates completed";
     }
 
     private Genre makeGenre(String g) {
         Genre genre = new Genre(g);
-        genre.setArtists(spotify.getArtists(genre));
-        for(Artist a : genre.getArtists()) {
-            Song[] songs = spotify.getSongs(a);
-            for(Song s : songs) {
-                String lyrics = musixMatch.getLyrics(a.getName(), s.getTitle());
-                if(lyrics.length() > 0) s.setLyrics(lyrics);
-            }
-            a.setSongs(songs);
+        genre.setSongs(spotify.getSongs(g));
+        for(Song s : genre.getSongs()) {
+            String lyrics = musix.getLyrics(s.getArtists().toString(),
+                    s.getTitle());
+            if(lyrics.length() > 0) s.setLyrics(lyrics);
         }
         return genre;
     }

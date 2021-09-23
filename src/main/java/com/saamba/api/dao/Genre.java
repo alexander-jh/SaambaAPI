@@ -1,25 +1,23 @@
 package com.saamba.api.dao;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Genre {
     private final String genre;
-    private List<Artist> artists;
+    private List<Song> songs;
 
     public Genre(String genre) {
         this.genre = genre;
-        this.artists = new ArrayList<>();
+        this.songs = new ArrayList<>();
     }
 
     public String getGenre() { return this.genre; }
 
-    public List<Artist> getArtists() { return this.artists; }
+    public List<Song> getSongs() { return this.songs; }
 
-    public void setArtists(Artist[] artists) {
-        for(Artist a : artists)
-            if(a.getName().length() > 0) this.artists.add(a);
+    public void setSongs(List<Song> songs) {
+        this.songs = songs;
     }
 
     @Override
@@ -27,8 +25,8 @@ public class Genre {
         StringBuilder sb = new StringBuilder();
         sb.append("Genre{ genre=").append(this.genre)
                 .append(", artists=[");
-        for(Artist a : this.artists)
-            sb.append(a.toString()).append(", ");
+        for(Song s : this.songs)
+            sb.append(s.toString()).append(", ");
         sb.delete(sb.length() - 2, sb.length());
         sb.append("]}");
         return sb.toString();

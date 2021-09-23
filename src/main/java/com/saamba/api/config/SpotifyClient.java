@@ -1,7 +1,6 @@
 package com.saamba.api.config;
 
 import com.neovisionaries.i18n.CountryCode;
-import com.saamba.api.dao.Artist;
 import com.saamba.api.dao.Genre;
 import com.saamba.api.dao.Song;
 import com.saamba.api.enums.ClientTypes;
@@ -9,15 +8,10 @@ import com.saamba.api.enums.ClientTypes;
 import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 
-import com.wrapper.spotify.model_objects.credentials.ClientCredentials;
-import com.wrapper.spotify.model_objects.specification.ArtistSimplified;
 import com.wrapper.spotify.model_objects.specification.Recommendations;
-import com.wrapper.spotify.model_objects.specification.Track;
 import com.wrapper.spotify.model_objects.specification.TrackSimplified;
-import com.wrapper.spotify.requests.authorization.client_credentials.ClientCredentialsRequest;
 import com.wrapper.spotify.requests.data.browse.miscellaneous.GetAvailableGenreSeedsRequest;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -91,48 +85,18 @@ public class SpotifyClient implements ClientConfig {
         return genres;
     }
 
-    public Artist[] getArtists(Genre genre) {
-        Artist[] artists = {};
+    public List<Song> getSongs(String genre) {
+        List<Song> songs = new ArrayList<>();
         try {
             Recommendations recommendations = spotifyClient.getRecommendations()
-                    .seed_genres(genre.getGenre())
+                    .seed_genres(genre)
                     .limit(recLimit)
                     .max_popularity(popMax)
                     .min_popularity(popMin)
                     .build()
                     .execute();
-            Set<ArtistSimplified> uniqueArtists = new HashSet<>();
-
             for(TrackSimplified t : recommendations.getTracks())
-                Arrays.stream(t.getArtists()).iterator().forEachRemaining(
-                        uniqueArtists::add
-                );
-
-            List<Artist> tmp = new ArrayList<>();
-
-            for(ArtistSimplified a : uniqueArtists)
-                tmp.add(new Artist(a));
-
-            artists = tmp.toArray(artists);
-
-        } catch (IOException | SpotifyWebApiException | ParseException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-        return artists;
-    }
-
-    public Song[] getSongs(Artist artist) {
-        Song[] songs = {};
-        try {
-            Track[] tracks = spotifyClient.getArtistsTopTracks(artist.getId(), countryCode)
-                    .build()
-                    .execute();
-
-            songs = new Song[tracks.length];
-
-            for(int i = 0; i < songs.length; ++i)
-                songs[i] = new Song(tracks[i]);
-
+                songs.add(new Song(t));
         } catch (IOException | SpotifyWebApiException | ParseException e) {
             System.out.println("Error: " + e.getMessage());
         }

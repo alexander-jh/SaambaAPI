@@ -3,7 +3,6 @@ package com.saamba.api;
 import com.saamba.api.entity.User;
 import com.saamba.api.repository.MusicRepository;
 import com.saamba.api.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
