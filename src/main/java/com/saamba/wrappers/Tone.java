@@ -21,8 +21,7 @@ public class Tone {
     }
 
     public static void main(String args[]) {
-        String analysis = analyze(
-                TwitterTesting.getPinnedTweet("taylorswift13"));
+        String analysis = analyze(TwitterTesting.getPinnedTweet("iamcardib"));
         System.out.println(analysis);
     }
 

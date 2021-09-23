@@ -32,8 +32,15 @@ public class TwitterTesting {
 
     public static String getPinnedTweet(String username) {
         User u = twitterClient.getUserFromUserName(username);
-        Tweet t = u.getPinnedTweet();
-        String str = t.getText();
+        Tweet t = null;
+        String str = null;
+        try {
+            t = u.getPinnedTweet();
+            str = t.getText();
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+            System.exit(1);
+        }
         return str;
     }
 
