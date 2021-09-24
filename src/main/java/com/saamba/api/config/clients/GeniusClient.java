@@ -3,6 +3,7 @@ package com.saamba.api.config.clients;
 import com.saamba.api.config.ClientConfig;
 import com.saamba.api.enums.ClientTypes;
 
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -25,6 +26,7 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 @Component
+@Slf4j
 public class GeniusClient implements ClientConfig {
 
     @Value("${client.genius.api.search}")
@@ -88,7 +90,7 @@ public class GeniusClient implements ClientConfig {
                 text = builder.toString().replaceAll("<br> ", " ");
             }
         } catch (IOException e) {
-            //e.printStackTrace();
+            log.error("Failed to parse lyrics for " + url + ".", e);
         }
         return text;
     }
@@ -117,7 +119,8 @@ public class GeniusClient implements ClientConfig {
                 }
             }
         } catch(IOException | JSONException e) {
-            System.out.println("Error: " + e.toString());
+            log.error("Failed to retrieve API path for " + title
+                    + " " + artists + ".", e);;
         }
         return path;
     }
@@ -126,7 +129,7 @@ public class GeniusClient implements ClientConfig {
         StringBuilder sb = new StringBuilder();
         sb.append(apiHost).append(searchRequest).append(title);
         for(String str : artists)
-        sb.append(" ").append(str);
+            sb.append(" ").append(str);
         return sb.toString();
     }
 

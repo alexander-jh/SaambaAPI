@@ -1,10 +1,13 @@
 package com.saamba.api.utils;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
+@Slf4j
 public class ThreadPool {
 
     private final BlockingQueue<Runnable> tasks;
@@ -13,16 +16,14 @@ public class ThreadPool {
 
     public ThreadPool(int taskMax, int threadMax) {
         tasks = new ArrayBlockingQueue<>(taskMax);
-        for(int i = 0; i < threadMax; ++i) {
-            Task task = new Task(tasks);
+        for(int i = 0; i < threadMax; ++i)
             runnables.add(new Task(tasks));
-        }
         for(Task runnable : runnables)
             new Thread(runnable).start();
     }
 
     public synchronized void execute(Runnable task) throws Exception {
-        if(this.isStopped) throw new IllegalStateException("Pool is closed.\n");
+        if(this.isStopped) throw new IllegalStateException("Thread pool has terminated.");
         this.tasks.offer(task);
     }
 
@@ -37,7 +38,7 @@ public class ThreadPool {
             try {
                 Thread.sleep(1);
             } catch(InterruptedException e) {
-                System.out.println("Thread interrupted.");
+                log.info("Thread interrupted.", e);
                 return false;
             }
         }

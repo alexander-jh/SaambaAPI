@@ -1,7 +1,10 @@
 package com.saamba.api.utils;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.concurrent.BlockingQueue;
 
+@Slf4j
 public class Task implements Runnable {
     private Thread thread = null;
     private final BlockingQueue<Runnable> tasks;
@@ -18,7 +21,7 @@ public class Task implements Runnable {
                 Runnable runnable = tasks.take();
                 runnable.run();
             } catch(Exception e) {
-                System.out.println("Error: " + e.getMessage());
+                log.info("Thread " + this.thread.getId() + " failed.", e);
             }
         }
     }

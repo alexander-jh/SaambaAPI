@@ -48,6 +48,26 @@ public class Song {
         this.valence = features.getValence();
     }
 
+    public Song(Track track, AudioFeatures features) {
+        this.artists = new ArrayList<>();
+        this.id = track.getId();
+        this.title = track.getName();
+        this.uri = track.getUri();
+        for(ArtistSimplified a : track.getArtists())
+            this.artists.add(a.getName());
+        this.lyrics = "";
+        this.acousticness = features.getAcousticness();
+        this.danceability = features.getDanceability();
+        this.energy = features.getEnergy();
+        this.instrumentalness = features.getInstrumentalness();
+        this.key = features.getKey();
+        this.liveness = features.getLiveness();
+        this.loudness = features.getLoudness();
+        this.speechiness = features.getSpeechiness();
+        this.tempo = features.getTempo();
+        this.valence = features.getValence();
+    }
+
     public Float getAcousticness() {
         return acousticness;
     }
