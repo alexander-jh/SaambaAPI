@@ -1,5 +1,8 @@
 package com.saamba.api.config;
 
+import com.saamba.api.config.clients.GeniusClient;
+import com.saamba.api.config.clients.IBMClient;
+import com.saamba.api.config.clients.SpotifyClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

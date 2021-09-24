@@ -1,27 +1,26 @@
-package com.saamba.api.config;
+package com.saamba.api.config.clients;
 
-import com.neovisionaries.i18n.CountryCode;
+import com.saamba.api.config.ClientConfig;
 import com.saamba.api.dao.music.Song;
 import com.saamba.api.enums.ClientTypes;
 
 import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
-
 import com.wrapper.spotify.model_objects.specification.Recommendations;
 import com.wrapper.spotify.model_objects.specification.TrackSimplified;
 import com.wrapper.spotify.requests.data.browse.miscellaneous.GetAvailableGenreSeedsRequest;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 
 import org.apache.hc.core5.http.ParseException;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.*;
 
-@Component
+@Service
 public class SpotifyClient implements ClientConfig {
 
     @Value("${client.spotify.secretkey}")
@@ -38,8 +37,6 @@ public class SpotifyClient implements ClientConfig {
 
     @Value("${client.spotify.popularity.min}")
     private int popMin;
-
-    private static final CountryCode countryCode = CountryCode.US;
 
     private SpotifyApi spotifyClient;
 
@@ -96,8 +93,12 @@ public class SpotifyClient implements ClientConfig {
                     .min_popularity(popMin)
                     .build()
                     .execute();
-            for(TrackSimplified t : recommendations.getTracks())
-                songs.add(new Song(t));
+            for(TrackSimplified t : recommendations.getTracks()) {
+                songs.add(new Song(t, spotifyClient
+                        .getAudioFeaturesForTrack(t.getId())
+                        .build()
+                        .execute()));
+            }
         } catch (IOException | SpotifyWebApiException | ParseException e) {
             System.out.println("Error: " + e.getMessage());
         }

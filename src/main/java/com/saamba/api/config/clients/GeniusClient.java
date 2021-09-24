@@ -1,6 +1,6 @@
-package com.saamba.api.config;
+package com.saamba.api.config.clients;
 
-import com.saamba.api.dao.music.Song;
+import com.saamba.api.config.ClientConfig;
 import com.saamba.api.enums.ClientTypes;
 
 import okhttp3.OkHttpClient;
@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
@@ -53,16 +54,17 @@ public class GeniusClient implements ClientConfig {
         return this;
     }
 
-    public void getLyrics(Song s) {
-        String url = getApiPath(s);
+    public String getLyrics(String title, List<String> artists) {
+        String url = getApiPath(title, artists);
         if(url.length() > 0) {
-            s.setLyrics(parseLyrics(url));
+            url = parseLyrics(url);
         } else {
-            s.setLyrics("");
+            url = "";
         }
+        return url;
     }
 
-    public String parseLyrics(String url) {
+    protected String parseLyrics(String url) {
         Document lyricsPage;
         String text = "";
         try {
@@ -86,15 +88,15 @@ public class GeniusClient implements ClientConfig {
                 text = builder.toString().replaceAll("<br> ", " ");
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return text;
     }
 
-    private String getApiPath(Song s) {
+    protected String getApiPath(String title, List<String> artists) {
         String path = "";
         Request request = new Request.Builder()
-                .url(getUrl(s))
+                .url(getUrl(title, artists))
                 .method("GET", null)
                 .addHeader("Authorization", "Bearer " + accessToken)
                 .build();
@@ -120,11 +122,11 @@ public class GeniusClient implements ClientConfig {
         return path;
     }
 
-    private String getUrl(Song s) {
+    protected String getUrl(String title, List<String> artists) {
         StringBuilder sb = new StringBuilder();
-        sb.append(apiHost).append(searchRequest).append(s.getTitle());
-        for(String str : s.getArtists())
-            sb.append(str).append(" ");
+        sb.append(apiHost).append(searchRequest).append(title);
+        for(String str : artists)
+        sb.append(" ").append(str);
         return sb.toString();
     }
 

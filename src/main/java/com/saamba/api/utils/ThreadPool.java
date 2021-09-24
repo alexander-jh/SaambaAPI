@@ -32,14 +32,16 @@ public class ThreadPool {
             t.doStop();
     }
 
-    public synchronized void waitForCompletion() {
+    public synchronized boolean waitForCompletion() {
         while(this.tasks.size() > 0) {
             try {
                 Thread.sleep(1);
             } catch(InterruptedException e) {
-                System.out.println("Error: " + e);
+                System.out.println("Thread interrupted.");
+                return false;
             }
         }
+        return true;
     }
 }
 

@@ -1,6 +1,7 @@
-package com.saamba.api.config;
+package com.saamba.api.config.clients;
 
 
+import com.saamba.api.config.ClientConfig;
 import com.saamba.api.enums.ClientTypes;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

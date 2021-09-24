@@ -1,6 +1,6 @@
 package com.saamba.api;
 
-import com.saamba.api.entity.User;
+import com.saamba.api.entity.user.User;
 import com.saamba.api.repository.MusicRepository;
 import com.saamba.api.repository.UserRepository;
 import org.springframework.boot.SpringApplication;

@@ -1,8 +1,8 @@
 package com.saamba.api.repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.saamba.api.config.GeniusClient;
-import com.saamba.api.config.SpotifyClient;
+import com.saamba.api.config.clients.GeniusClient;
+import com.saamba.api.config.clients.SpotifyClient;
 
 import com.saamba.api.dao.music.Genre;
 import com.saamba.api.dao.music.Song;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 
@@ -34,6 +35,7 @@ public class MusicRepository {
     public String updateMusic() {
         ThreadPool threadPool = new ThreadPool(taskMax, threadMax);
         String[] genres = spotify.getGenres();
+        createDir();
         for (String g : genres)
             try {
                 threadPool.execute(() -> genreToJSON(makeGenre(g)));
@@ -49,8 +51,14 @@ public class MusicRepository {
         Genre genre = new Genre(g);
         genre.setSongs(spotify.getSongs(g));
         for(Song s : genre.getSongs())
-            genius.getLyrics(s);
+            s.setLyrics(genius.getLyrics(s.getTitle(), s.getArtists()));
         return genre;
+    }
+
+    private void createDir() {
+        File dir = new File("json");
+        if(!dir.exists())
+            dir.mkdirs();
     }
 
     private void genreToJSON(Genre g) {
