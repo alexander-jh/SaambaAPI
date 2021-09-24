@@ -12,6 +12,7 @@ import com.wrapper.spotify.model_objects.specification.TrackSimplified;
 import com.wrapper.spotify.requests.data.browse.miscellaneous.GetAvailableGenreSeedsRequest;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import org.apache.hc.core5.http.ParseException;
@@ -45,6 +46,7 @@ public class SpotifyClient implements ClientConfig {
     public SpotifyClient() { }
 
     @Override
+    @Scheduled(cron = "0/5?") // Every 5 minutes
     public void refreshCredentials() {
         spotifyClient.setRefreshToken(spotifyClient.getRefreshToken());
     }
