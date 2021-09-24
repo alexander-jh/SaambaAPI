@@ -1,4 +1,4 @@
-package com.saamba.api.dao;
+package com.saamba.api.dao.music;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

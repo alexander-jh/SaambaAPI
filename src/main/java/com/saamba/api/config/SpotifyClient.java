@@ -1,8 +1,7 @@
 package com.saamba.api.config;
 
 import com.neovisionaries.i18n.CountryCode;
-import com.saamba.api.dao.Genre;
-import com.saamba.api.dao.Song;
+import com.saamba.api.dao.music.Song;
 import com.saamba.api.enums.ClientTypes;
 
 import com.wrapper.spotify.SpotifyApi;

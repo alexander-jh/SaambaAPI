@@ -1,11 +1,11 @@
 package com.saamba.api.repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.saamba.api.config.MusixMatchClient;
+import com.saamba.api.config.GeniusClient;
 import com.saamba.api.config.SpotifyClient;
 
-import com.saamba.api.dao.Genre;
-import com.saamba.api.dao.Song;
+import com.saamba.api.dao.music.Genre;
+import com.saamba.api.dao.music.Song;
 import com.saamba.api.utils.ThreadPool;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -28,32 +28,28 @@ public class MusicRepository {
     @Resource(name="spotify")
     SpotifyClient spotify;
 
-    @Resource(name="musix")
-    MusixMatchClient musix;
+    @Resource(name="genius")
+    GeniusClient genius;
 
     public String updateMusic() {
         ThreadPool threadPool = new ThreadPool(taskMax, threadMax);
         String[] genres = spotify.getGenres();
         for (String g : genres)
-            genreToJSON(makeGenre(g));
-//            try {
-//                threadPool.execute(() -> genreToJSON(makeGenre(g)));
-//            } catch(Exception e) {
-//                System.out.println(e.getMessage());
-//            }
-//        threadPool.waitForCompletion();
-//        threadPool.stop();
+            try {
+                threadPool.execute(() -> genreToJSON(makeGenre(g)));
+            } catch(Exception e) {
+                System.out.println(e.getMessage());
+            }
+        threadPool.waitForCompletion();
+        threadPool.stop();
         return "music updates completed";
     }
 
     private Genre makeGenre(String g) {
         Genre genre = new Genre(g);
         genre.setSongs(spotify.getSongs(g));
-        for(Song s : genre.getSongs()) {
-            String lyrics = musix.getLyrics(s.getArtists().toString(),
-                    s.getTitle());
-            if(lyrics.length() > 0) s.setLyrics(lyrics);
-        }
+        for(Song s : genre.getSongs())
+            genius.getLyrics(s);
         return genre;
     }
 

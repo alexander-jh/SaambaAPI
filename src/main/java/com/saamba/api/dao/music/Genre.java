@@ -1,4 +1,4 @@
-package com.saamba.api.dao;
+package com.saamba.api.dao.music;
 
 import java.util.ArrayList;
 import java.util.List;

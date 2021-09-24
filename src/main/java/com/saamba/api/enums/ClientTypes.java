@@ -5,6 +5,5 @@ public enum ClientTypes {
     IBM,
     AWS,
     Twitter,
-    Genius,
-    MusixMatch;
+    Genius;
 }

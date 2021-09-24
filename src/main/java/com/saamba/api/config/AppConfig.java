@@ -15,6 +15,6 @@ public class AppConfig {
     @Bean("aws")
     public AWSConfig awsAPI() { return new AWSConfig(); }
 
-    @Bean("musix")
-    public MusixMatchClient musixAPI() { return new MusixMatchClient(); }
+    @Bean("genius")
+    public GeniusClient geniusAPI() { return new GeniusClient(); }
 }
