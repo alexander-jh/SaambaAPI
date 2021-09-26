@@ -3,7 +3,7 @@
 #### Dependencies
 - Docker
 
-####C ommands 
+#### Commands 
 From project root run:
 - Build: `docker build -t saamba .`
 - Run: `docker run -t saamba`
