@@ -1,8 +1,9 @@
 package com.saamba.api.config;
 
 import com.saamba.api.config.clients.GeniusClient;
-import com.saamba.api.config.clients.IBMClient;
+import com.saamba.api.config.clients.DiscoveryClient;
 import com.saamba.api.config.clients.SpotifyClient;
+import com.saamba.api.config.clients.ToneClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,10 +18,16 @@ public class AppConfig {
         return new SpotifyClient();
     }
 
-    @Bean("ibm")
-    public IBMClient ibmAPI() {
-        log.info("IBMClient bean created.");
-        return new IBMClient();
+    @Bean("discovery")
+    public DiscoveryClient discoveryAPI() {
+        log.info("DiscoveryClient bean created.");
+        return new DiscoveryClient();
+    }
+
+    @Bean("tone")
+    public ToneClient toneAPI() {
+        log.info("ToneClient bean created.");
+        return new ToneClient();
     }
 
     @Bean("aws")
@@ -33,5 +40,11 @@ public class AppConfig {
     public GeniusClient geniusAPI() {
         log.info("GeniusClient bean created.");
         return new GeniusClient();
+    }
+
+    @Bean("twitter")
+    public TwitterConfig twitterApi() {
+        log.info("TwitterConfig bean created.");
+        return new TwitterConfig();
     }
 }

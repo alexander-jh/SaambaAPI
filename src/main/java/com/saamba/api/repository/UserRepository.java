@@ -17,6 +17,10 @@ public class UserRepository {
     @Autowired
     private DynamoDBMapper mapper;
 
+    public String getPlaylist(String accountName) {
+        return "";
+    }
+
     public User addUser(User user) {
         mapper.save(user);
         return user;
@@ -43,6 +47,4 @@ public class UserRepository {
         dynamoDBSaveExpression.setExpected(expectedMap);
         return dynamoDBSaveExpression;
     }
-
-
 }

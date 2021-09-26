@@ -15,7 +15,6 @@ public class User implements Serializable {
 
     private String uri;
     private String spotifyId;
-    private List<String> blackList;
     private List<String> artists;
     private List<String> genres;
     private List<Playlist> playlists;
@@ -43,14 +42,6 @@ public class User implements Serializable {
 
     public void setSpotifyId(String spotifyId) {
         this.spotifyId = spotifyId;
-    }
-
-    public List<String> getBlackList() {
-        return blackList;
-    }
-
-    public void setBlackList(List<String> blackList) {
-        this.blackList = blackList;
     }
 
     public List<String> getArtists() {

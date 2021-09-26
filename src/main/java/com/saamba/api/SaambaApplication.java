@@ -18,6 +18,15 @@ public class SaambaApplication {
     @Resource(name = "user")
     private UserRepository entityRepo;
 
+    @GetMapping("/getPlaylist/{accountName}")
+    public String getPlaylist(@PathVariable String accountName) {
+        log.info("Starting API call /getPlaylist/" + accountName);
+        return entityRepo.getPlaylist(accountName);
+    }
+
+/*
+    Functionality degraded for the sake of first milestone.
+
     @Resource(name = "music")
     private MusicRepository musicRepo;
 
@@ -51,9 +60,9 @@ public class SaambaApplication {
         return entityRepo.editUser(user);
     }
 
+*/
     public static void main(String[] args) {
         log.info("Initializing SaambaApplication.");
         SpringApplication.run(SaambaApplication.class, args);
     }
-
 }

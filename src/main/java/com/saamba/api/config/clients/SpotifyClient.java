@@ -7,6 +7,7 @@ import com.saamba.api.enums.ClientTypes;
 
 import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
+import com.wrapper.spotify.model_objects.credentials.AuthorizationCodeCredentials;
 import com.wrapper.spotify.model_objects.specification.ArtistSimplified;
 import com.wrapper.spotify.model_objects.specification.Recommendations;
 import com.wrapper.spotify.model_objects.specification.Track;
@@ -48,15 +49,15 @@ public class SpotifyClient implements ClientConfig {
 
     private final CountryCode countryCode = CountryCode.US;
 
-    private SpotifyApi spotifyClient;
+    protected SpotifyApi spotifyClient;
 
     public SpotifyClient() { }
 
     @Override
     @Scheduled(cron = "0/5?") // Every 5 minutes
-    public void refreshCredentials() {
+    public synchronized void refreshCredentials() {
+        this.init();
         log.info("Spotify credentials renewed.");
-        spotifyClient.setRefreshToken(spotifyClient.getRefreshToken());
     }
 
     @Override
@@ -130,5 +131,9 @@ public class SpotifyClient implements ClientConfig {
             log.error("Failed to retrieve songs from Spotify.", e);
         }
         return songs;
+    }
+
+    protected String getCurrentAccessToken() {
+        return spotifyClient.getAccessToken();
     }
 }

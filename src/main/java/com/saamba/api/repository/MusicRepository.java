@@ -6,9 +6,11 @@ import com.saamba.api.config.clients.SpotifyClient;
 
 import com.saamba.api.dao.music.Genre;
 import com.saamba.api.dao.music.Song;
+import com.saamba.api.entity.music.MusicService;
 import com.saamba.api.utils.ThreadPool;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -17,6 +19,7 @@ import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.List;
 
 @Repository("music")
 @Slf4j
@@ -27,6 +30,9 @@ public class MusicRepository {
 
     @Value("${client.spotify.thread.limit}")
     private int threadMax;
+
+    @Autowired
+    private MusicService musicService;
 
     @Resource(name="spotify")
     SpotifyClient spotify;
@@ -43,7 +49,7 @@ public class MusicRepository {
         createDir();
         for (String g : genres)
             try {
-                threadPool.execute(() -> genreToJSON(makeGenre(g)));
+                threadPool.execute(() -> makeGenre(g));
             } catch(Exception e) {
                 log.error("Thread execution exceptions ", e);
             }
@@ -53,15 +59,20 @@ public class MusicRepository {
         return "music updates completed";
     }
 
-    private Genre makeGenre(String g) {
-        Genre genre = new Genre(g);
+    private void makeGenre(String g) {
         log.info("Creating genre " + g + ".");
-        genre.setSongs(spotify.getSongs(g));
-        log.info("Genre " + g + " has " + genre.getSongs().size() + " songs.");
-        for(Song s : genre.getSongs())
+        Genre genre = new Genre(g);
+        List<Song> songs = spotify.getSongs(g);
+        log.info("Genre " + g + " has " + songs.size() + " songs.");
+        for(Song s : songs) {
             s.setLyrics(genius.getLyrics(s.getTitle(), s.getArtists()));
+            if(!musicService.songExists(s.getURI(), g))
+                musicService.createMusic(s, genre);
+            else
+                musicService.updateLyrics(s, genre);
+        }
+        backfillJSON(g);
         log.info("Genre " + g + " has finished processing.");
-        return genre;
     }
 
     private void createDir() {
@@ -78,5 +89,11 @@ public class MusicRepository {
         } catch(IOException e) {
             log.error("Genre " + g.getGenre() + " has failed to parse into json.", e);
         }
+    }
+
+    private void backfillJSON(String g) {
+       log.info("Genre " + g + " starting backfill.");
+        genreToJSON(musicService.exportGenre(g));
+        log.info("Genre " + g + " successfully backfilled.");
     }
 }

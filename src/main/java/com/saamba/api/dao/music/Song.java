@@ -3,6 +3,7 @@ package com.saamba.api.dao.music;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.saamba.api.entity.music.Music;
 import com.wrapper.spotify.model_objects.specification.ArtistSimplified;
 import com.wrapper.spotify.model_objects.specification.AudioFeatures;
 import com.wrapper.spotify.model_objects.specification.Track;
@@ -12,7 +13,6 @@ import org.springframework.test.context.TestConstructor;
 
 public class Song {
 
-    private final String id;
     private final String title;
     private final String uri;
     private String lyrics;
@@ -30,7 +30,6 @@ public class Song {
 
     public Song(TrackSimplified track, AudioFeatures features) {
         this.artists = new ArrayList<>();
-        this.id = track.getId();
         this.title = track.getName();
         this.uri = track.getUri();
         for(ArtistSimplified a : track.getArtists())
@@ -48,9 +47,26 @@ public class Song {
         this.valence = features.getValence();
     }
 
+    public Song(Music music) {
+        this.artists = new ArrayList<>();
+        this.title = music.getTitle();
+        this.uri = music.getUri();
+        this.artists.addAll(music.getArtists());
+        this.lyrics = "";
+        this.acousticness = music.getAcousticness();
+        this.danceability = music.getDanceability();
+        this.energy = music.getEnergy();
+        this.instrumentalness = music.getInstrumentalness();
+        this.key = music.getKey();
+        this.liveness = music.getLiveness();
+        this.loudness = music.getLoudness();
+        this.speechiness = music.getSpeechiness();
+        this.tempo = music.getTempo();
+        this.valence = music.getValence();
+    }
+
     public Song(Track track, AudioFeatures features) {
         this.artists = new ArrayList<>();
-        this.id = track.getId();
         this.title = track.getName();
         this.uri = track.getUri();
         for(ArtistSimplified a : track.getArtists())
@@ -112,9 +128,6 @@ public class Song {
         return this.artists;
     }
 
-    public String getId() {
-        return this.id;
-    }
 
     public String getTitle() {
         return this.title;
@@ -135,8 +148,7 @@ public class Song {
     @Override
     public String toString() {
         return (new StringBuilder())
-                .append("Song{ id=").append(this.id)
-                .append(", title=").append(this.title)
+                .append("title=").append(this.title)
                 .append(", uri=").append(this.uri)
                 .append(", lyrics=\"").append(this.lyrics)
                 .append("\"}").toString();

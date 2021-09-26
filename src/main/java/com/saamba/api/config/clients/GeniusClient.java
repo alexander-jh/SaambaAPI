@@ -90,7 +90,7 @@ public class GeniusClient implements ClientConfig {
                 text = builder.toString().replaceAll("<br> ", " ");
             }
         } catch (IOException e) {
-            log.error("Failed to parse lyrics for " + url + ".", e);
+            log.error("Failed to parse lyrics for " + url + ".");
         }
         return text;
     }
