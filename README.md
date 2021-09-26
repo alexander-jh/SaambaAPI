@@ -1,53 +1,21 @@
-# springboot-dynamodb-example
-Build CRUD Application using SpringBoot + DynamoDB then Deploy CRUD application to Elastic Beanstalk 
+##SaambaAPI Build Instructions
 
+####Dependencies
+- Docker
 
----
+####Commands 
+From project root run:
+- Build: `docker build -t saamba .`
+- Run: `docker run -t saamba`
+- Endpoint: `localhost:8080`
 
-## Dependency (Required)
-
-```javascript
-<dependency>
-	<groupId>com.amazonaws</groupId>
-	<artifactId>aws-java-sdk-dynamodb</artifactId>
-	<version>1.11.815</version>
-</dependency>
-```
-
-
-
-## Custom Policy
-
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action":   [ "dynamodb:PutItem" ],
-      "Resource": [ "*" ]
-    },
-    {
-      "Effect": "Allow",
-      "Action":   [ "sns:Publish" ],
-      "Resource": [ "*" ]
-    }
-  ]
+####API Endpoints
+To retrieve playlist GET request it is `localhost:8080/getPlaylist/{accountName}`. Returns JSON of the form:
+````
+{ 
+    "date": <date playlist created>,
+    "songs": [
+        "<Spotify URI to each song>"
+    ]
 }
-```
-
-## Request JSON
-
-```json
-{
-	"name":"Santosh",
-	"email":"santosh@gmail.com",
-	"age":30,
-	"address":{
-		"city":"Bangalore",
-		"state":"karnataka",
-		"pinCode":"560037"
-	}
-}
-
-```
+````

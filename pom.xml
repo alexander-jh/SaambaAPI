@@ -112,15 +112,5 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
-		<resources>
-			<resource>
-				<filtering>true</filtering>
-				<directory>python</directory><!-- from -->
-				<targetPath>${project.build.directory}/python</targetPath><!-- to -->
-				<includes><!-- what -->
-					<include>LyricDownloader.py</include>
-				</includes>
-			</resource>
-		</resources>
 	</build>
 </project>
