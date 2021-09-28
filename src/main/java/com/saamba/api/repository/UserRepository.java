@@ -4,10 +4,14 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBSaveExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ExpectedAttributeValue;
+import com.saamba.api.config.TwitterConfig;
+import com.saamba.api.config.clients.DiscoveryClient;
+import com.saamba.api.config.clients.ToneClient;
 import com.saamba.api.entity.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,14 +25,25 @@ public class UserRepository {
     @Autowired
     private DynamoDBMapper mapper;
 
+    @Resource(name="discovery")
+    private DiscoveryClient discoveryClient;
+
+    @Resource(name="twitter")
+    private TwitterConfig twitterConfig;
+
+    @Resource(name="tone")
+    private ToneClient toneClient;
+
     /**
      * Returns a JSON string of a playlist from a user's twitter handle.
      * @param accountName   - string twitter handle passed in url
      * @return              - formatted JSON string of playlist
      */
     public String getPlaylist(String accountName) {
-
-        return "{\"date\":\"09/25/2021\",\"songs\":[\"accountName\"]}";
+        return discoveryClient.findSongs(
+                toneClient.analyzeText(
+                        twitterConfig.getPinnedTweet(
+                                accountName)));
     }
 
     /**

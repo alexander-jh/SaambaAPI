@@ -1,7 +1,6 @@
 package com.saamba.api.config.clients;
 
 import com.ibm.cloud.sdk.core.security.IamAuthenticator;
-import com.ibm.watson.discovery.v1.Discovery;
 import com.ibm.watson.tone_analyzer.v3.ToneAnalyzer;
 import com.ibm.watson.tone_analyzer.v3.model.ToneOptions;
 import com.saamba.api.config.ClientConfig;
@@ -54,7 +53,7 @@ public class ToneClient implements ClientConfig {
      * @param text  - string of text
      * @return      - string of tone
      */
-    public String analyzeTest(String text) {
+    public String analyzeText(String text) {
         return toneAnalyzer.tone(new ToneOptions.Builder().text(text).build())
                 .execute()
                 .getResult()
