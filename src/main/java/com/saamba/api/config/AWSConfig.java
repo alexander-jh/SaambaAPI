@@ -29,11 +29,20 @@ public class AWSConfig implements  ClientConfig {
     @Override
     public void refreshCredentials() {};
 
+    /**
+     * Mapper to DDB client for CRUD operations.
+     * @return      - DDB mapper
+     */
     @Bean
     public DynamoDBMapper mapper() {
         return new DynamoDBMapper(amazonDynamoDBConfig());
     }
 
+    /**
+     * Creates and authenticates DDB client to the relevant AWS account.
+     * TODO: authenticate to resource directly
+     * @return      - DDB client
+     */
     private AmazonDynamoDB amazonDynamoDBConfig() {
         return AmazonDynamoDBClientBuilder.standard()
                 .withCredentials(

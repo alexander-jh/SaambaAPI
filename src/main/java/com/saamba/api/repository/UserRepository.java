@@ -11,35 +11,71 @@ import org.springframework.stereotype.Repository;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Service level logic to handle reporting back to main controller
+ * and construct majority of API calls from front-end.
+ */
 @Repository("user")
 public class UserRepository {
 
     @Autowired
     private DynamoDBMapper mapper;
 
+    /**
+     * Returns a JSON string of a playlist from a user's twitter handle.
+     * @param accountName   - string twitter handle passed in url
+     * @return              - formatted JSON string of playlist
+     */
     public String getPlaylist(String accountName) {
-        return "";
+
+        return "{\"date\":\"09/25/2021\",\"songs\":[\"accountName\"]}";
     }
 
+    /**
+     * Add a new user to the user table.
+     * @param user      - JPA entity of user
+     * @return          - returns the created user
+     */
     public User addUser(User user) {
         mapper.save(user);
         return user;
     }
 
+    /**
+     * Queries users in table through primary key, twitter handle.
+     * @param account   - string twitter handle
+     * @return          - referenced user object representation
+     */
     public User findUserByAccount(String account) {
         return mapper.load(User.class, account);
     }
 
+    /**
+     * Deletes user from table.
+     * @param user      - user object reference to delete
+     * @return          - returns confirmation of delete
+     */
     public String deleteUser(User user) {
         mapper.delete(user);
         return "user removed !!";
     }
 
+    /**
+     * Pushes changes to a user to the table.
+     * @param user      - updated user object
+     * @return          - confirmation of update
+     */
     public String editUser(User user) {
         mapper.save(user, buildExpression(user));
         return "record updated ...";
     }
 
+    /**
+     * Creates the DynamoDB save expression for updates to the user
+     * object using DDB mapper.
+     * @param user      - user object to update
+     * @return          - returns the expression to execute to caller
+     */
     private DynamoDBSaveExpression buildExpression(User user) {
         DynamoDBSaveExpression dynamoDBSaveExpression = new DynamoDBSaveExpression();
         Map<String, ExpectedAttributeValue> expectedMap = new HashMap<>();

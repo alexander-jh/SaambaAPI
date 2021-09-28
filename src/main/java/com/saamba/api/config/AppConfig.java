@@ -8,6 +8,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Bean configuration reference for each of the different clients
+ * and configs used at the service layer.
+ *
+ * IBM services are identified by unique clients and are not abstracted
+ * due to lack of homogenized API call and credentials.
+ */
 @Configuration
 @Slf4j
 public class AppConfig {

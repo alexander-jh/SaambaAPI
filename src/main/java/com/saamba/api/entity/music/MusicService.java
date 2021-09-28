@@ -15,6 +15,9 @@ public class MusicService {
     @Autowired
     private SongToMusic musicDao;
 
+    /**
+     * CRUD operations.
+     */
     public void createMusic(Song song, Genre genre) {
         musicDao.createMusic(song, genre);
     }
@@ -35,6 +38,12 @@ public class MusicService {
         musicDao.deleteMusic(uri, genre);
     }
 
+    /**
+     * Converts music entity objects for each song by genre into
+     * DAO song representation for exporting to JSON.
+     * @param g - string genre
+     * @return  - genre object
+     */
     public Genre exportGenre(String g) {
         Genre genre = new Genre(g);
         List<Music> music = musicDao.getGenre(g);

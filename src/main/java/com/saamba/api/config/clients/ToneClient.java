@@ -25,6 +25,12 @@ public class ToneClient implements ClientConfig {
 
     public ToneClient() { }
 
+    /**
+     * Necessary function which instantiates after the no-arg constructor
+     * is invoked. Needed since values aren't injected until after creation
+     * of the class.
+     * @return      - tone analyzer agent
+     */
     @PostConstruct
     public ToneClient init() {
         this.toneAnalyzer = new ToneAnalyzer(apiDate,
@@ -34,11 +40,20 @@ public class ToneClient implements ClientConfig {
     }
 
     @Override
-    public ClientTypes getClientType() { return ClientTypes.IBM; }
+    public ClientTypes getClientType() {
+        return ClientTypes.IBM;
+    }
 
     @Override
-    public void refreshCredentials() {}
+    public void refreshCredentials() {
+        // Not necessary
+    }
 
+    /**
+     * Returns the primary tone from a string of text.
+     * @param text  - string of text
+     * @return      - string of tone
+     */
     public String analyzeTest(String text) {
         return toneAnalyzer.tone(new ToneOptions.Builder().text(text).build())
                 .execute()

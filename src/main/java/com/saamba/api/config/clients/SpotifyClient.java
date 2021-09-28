@@ -25,6 +25,12 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * This client is a bit different in that Spotify throttles API
+ * calls based on the number received in a 30 second window. The
+ * workaround for this is consistent timeouts between consecutive
+ * calls.
+ */
 @Service
 @Slf4j
 public class SpotifyClient implements ClientConfig {
@@ -53,6 +59,9 @@ public class SpotifyClient implements ClientConfig {
 
     public SpotifyClient() { }
 
+    /**
+     * Cron expression to refresh credentials every 5 minutes.
+     */
     @Override
     @Scheduled(cron = "0/5?") // Every 5 minutes
     public synchronized void refreshCredentials() {
@@ -63,6 +72,12 @@ public class SpotifyClient implements ClientConfig {
     @Override
     public ClientTypes getClientType() { return ClientTypes.Spotify; }
 
+    /**
+     * Necessary function which instantiates after the no-arg constructor
+     * is invoked. Needed since values aren't injected until after creation
+     * of the class.
+     * @return      - spotify agent
+     */
     @PostConstruct
     public SpotifyClient init() {
         spotifyClient = new SpotifyApi.Builder()
@@ -82,6 +97,10 @@ public class SpotifyClient implements ClientConfig {
         return this;
     }
 
+    /**
+     * Gets a list of all available genres on Spotify.
+     * @return      - string array of genre names
+     */
     public synchronized String[] getGenres() {
         String[] genres = {};
         try {
@@ -96,6 +115,12 @@ public class SpotifyClient implements ClientConfig {
         return genres;
     }
 
+    /**
+     * Returns all the songs for a given genre as a list. Internal
+     * logic and comments describe steps.
+     * @param genre     - string genre name
+     * @return          - list of songs in a genre
+     */
     public synchronized List<Song> getSongs(String genre) {
         List<Song> songs = new ArrayList<>();
         try {
@@ -133,6 +158,10 @@ public class SpotifyClient implements ClientConfig {
         return songs;
     }
 
+    /**
+     * Test function for verifying credential refresh.
+     * @return      - string of access token
+     */
     protected String getCurrentAccessToken() {
         return spotifyClient.getAccessToken();
     }

@@ -3,6 +3,14 @@ package com.saamba.api.dao.music;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A DAO POJO is necessary for the sake of creating a properly formatted
+ * JSON to match discovery client query logic.
+ *
+ * This representation is meant to handle data level logic in the application
+ * the entity is for normalizing songs to match the DDB schema. More
+ * detail in the music entity class.
+ */
 public class Genre {
     private final String genre;
     private List<Song> songs;

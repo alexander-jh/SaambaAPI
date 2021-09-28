@@ -9,6 +9,15 @@ import lombok.*;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * Defined schema for the Music DDB table. Entities are uniquely identifiable
+ * by genre:uri, with the primary key being genre and sort key being uri.
+ *
+ * Genre is the primary key to aid in query logic to get songs of a specific
+ * genre.
+ *
+ * All other attributes are self explanatory.
+ */
 @Getter
 @Setter
 @Builder

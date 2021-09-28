@@ -25,6 +25,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
+/**
+ * Simply just a wrapper to implement the GET call to Genius to
+ * search for a song by title and artists. Parses api_path for
+ * a song, then uses OkHttp client to parse lyrics.
+ */
 @Component
 @Slf4j
 public class GeniusClient implements ClientConfig {
@@ -48,6 +53,12 @@ public class GeniusClient implements ClientConfig {
 
     public GeniusClient() { }
 
+    /**
+     * Necessary function which instantiates after the no-arg constructor
+     * is invoked. Needed since values aren't injected until after creation
+     * of the class.
+     * @return      - genius agent
+     */
     @PostConstruct
     public GeniusClient init() {
         geniusClient = new OkHttpClient()
@@ -56,6 +67,14 @@ public class GeniusClient implements ClientConfig {
         return this;
     }
 
+    /**
+     * Entry point for client. Gets lyrics for a song. If the lyrics
+     * don't exist or there is a failure just returns an empty string
+     * to caller.
+     * @param title     - string song title
+     * @param artists   - list of string artist names
+     * @return          - string of associated song lyrics
+     */
     public String getLyrics(String title, List<String> artists) {
         String url = getApiPath(title, artists);
         if(url.length() > 0) {
@@ -66,6 +85,13 @@ public class GeniusClient implements ClientConfig {
         return url;
     }
 
+    /**
+     * Http parser for song's Genius page. Navigates directly to lyrics
+     * div and breaks apart based upon <br>. Logic can be followed in the
+     * regex calls.
+     * @param url       - string url to genius page
+     * @return          - string of lyrics
+     */
     protected String parseLyrics(String url) {
         Document lyricsPage;
         String text = "";
@@ -95,6 +121,16 @@ public class GeniusClient implements ClientConfig {
         return text;
     }
 
+    /**
+     * Makes GET request to Genius API for the search endpoint using a
+     * song's title and associated artists. Entry logic constructs the
+     * request. Internal logic conducts request to Genius and parses
+     * relevant JSON for api_path location. Last part constructs url
+     * for song.
+     * @param title     - string song title
+     * @param artists   - list of string of artists
+     * @return          - html for song
+     */
     protected String getApiPath(String title, List<String> artists) {
         String path = "";
         Request request = new Request.Builder()
@@ -125,6 +161,12 @@ public class GeniusClient implements ClientConfig {
         return path;
     }
 
+    /**
+     * Creates search query url for GET request.
+     * @param title     - string song title
+     * @param artists   - list of string of artists
+     * @return          - url for API call
+     */
     protected String getUrl(String title, List<String> artists) {
         StringBuilder sb = new StringBuilder();
         sb.append(apiHost).append(searchRequest).append(title);
@@ -137,7 +179,9 @@ public class GeniusClient implements ClientConfig {
     public ClientTypes getClientType() { return ClientTypes.Genius; }
 
     @Override
-    public void refreshCredentials() { }
+    public void refreshCredentials() {
+        // Not necessary to implement.
+    }
 
 
 }

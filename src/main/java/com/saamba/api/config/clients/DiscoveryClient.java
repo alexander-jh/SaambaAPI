@@ -46,6 +46,12 @@ public class DiscoveryClient implements ClientConfig {
     @Override
     public void refreshCredentials() {}
 
+    /**
+     * Necessary function which instantiates after the no-arg constructor
+     * is invoked. Needed since values aren't injected until after creation
+     * of the class.
+     * @return      - discovery query agent
+     */
     @PostConstruct
     public DiscoveryClient init() {
         this.discoveryClient = new Discovery(apiDate,
@@ -56,6 +62,12 @@ public class DiscoveryClient implements ClientConfig {
         return this;
     }
 
+    /**
+     * Searches for song in discovery client based upon the seed query
+     * string.
+     * @param seed      - string for query
+     * @return          - uri reference to spotify song
+     */
     public String findSongs(String seed) {
         log.info("Starting query over Discovery collection for " + seed + " .");
         QueryResponse query = discoveryClient.query(

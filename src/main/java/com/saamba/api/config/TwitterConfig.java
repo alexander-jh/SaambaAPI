@@ -42,6 +42,12 @@ public class TwitterConfig implements ClientConfig {
 
     public TwitterConfig() { }
 
+    /**
+     * Necessary function which instantiates after the no-arg constructor
+     * is invoked. Needed since values aren't injected until after creation
+     * of the class.
+     * @return      - twitter agent
+     */
     @PostConstruct
     public TwitterConfig init() {
         this.twitterClient = new TwitterClient(
@@ -60,9 +66,14 @@ public class TwitterConfig implements ClientConfig {
 
     @Override
     public void refreshCredentials() {
-
+        // Undefined
     }
 
+    /**
+     * Gets pinned tweet for an account name
+     * @param accountName   - string twitter handle
+     * @return              - string of pinned tweet
+     */
     public String getPinnedTweet(String accountName) {
         String pinned = "";
         try {
@@ -75,6 +86,13 @@ public class TwitterConfig implements ClientConfig {
         return pinned;
     }
 
+    /**
+     * Returns a list of all tweets associated with a twitter handle. The
+     * current limitation is that this call assumes a profiles must
+     * be public.
+     * @param accountName   - string twitter handle
+     * @return              - a list of tweet objects
+     */
     public List<Tweet> getTweets(String accountName) {
         Tweet t;
         List<Tweet> tweets = new ArrayList<>();

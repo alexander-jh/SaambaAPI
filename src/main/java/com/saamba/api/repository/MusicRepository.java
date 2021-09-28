@@ -21,6 +21,15 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
 
+/**
+ * Controls logic for pulling song data from Spotify and lyrics
+ * from Genius. Pulls top songs by genre, then uses associated
+ * artists to query songs for each artist.
+ *
+ * Uses DynamoDB to record unique songs. If a song doesn't exist
+ * it adds the new song. If it exists checks if lyrics exist if
+ * not updates them.
+ */
 @Repository("music")
 @Slf4j
 public class MusicRepository {
@@ -40,6 +49,11 @@ public class MusicRepository {
     @Resource(name="genius")
     GeniusClient genius;
 
+    /**
+     * Entry point for service. uses a thread pool to get song data.
+     * Each thread is given a specific genre.
+     * @return      - acknowledgement of completion
+     */
     public String updateMusic() {
         ThreadPool threadPool = new ThreadPool(taskMax, threadMax);
         log.info("Instantiating thread pool with " + threadMax +
@@ -59,6 +73,11 @@ public class MusicRepository {
         return "music updates completed";
     }
 
+    /**
+     * Uses music service bean to update the database with the newly
+     * pulled song data.
+     * @param g     - string of genre title
+     */
     private void makeGenre(String g) {
         log.info("Creating genre " + g + ".");
         Genre genre = new Genre(g);
@@ -75,12 +94,21 @@ public class MusicRepository {
         log.info("Genre " + g + " has finished processing.");
     }
 
+    /**
+     * Creates json directory for backfill if it doesn't exist.
+     */
     private void createDir() {
         File dir = new File("json");
         if(!dir.exists())
             dir.mkdirs();
     }
 
+    /**
+     * Queries the database to pull all songs associated with a
+     * genre and uses jackson object mapper to convert the JPA
+     * entity into a JSON.
+     * @param g     - string genre name
+     */
     private void genreToJSON(Genre g) {
         ObjectMapper mapper = new ObjectMapper();
         String fileName = "json/" + g.getGenre() + ".json";
@@ -91,8 +119,12 @@ public class MusicRepository {
         }
     }
 
+    /**
+     * Invokes functionality to create JSON for a genre.
+     * @param g     - string genre name
+     */
     private void backfillJSON(String g) {
-       log.info("Genre " + g + " starting backfill.");
+        log.info("Genre " + g + " starting backfill.");
         genreToJSON(musicService.exportGenre(g));
         log.info("Genre " + g + " successfully backfilled.");
     }
