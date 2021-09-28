@@ -8,8 +8,6 @@ import com.wrapper.spotify.model_objects.specification.ArtistSimplified;
 import com.wrapper.spotify.model_objects.specification.AudioFeatures;
 import com.wrapper.spotify.model_objects.specification.Track;
 import com.wrapper.spotify.model_objects.specification.TrackSimplified;
-import org.junit.Test;
-import org.springframework.test.context.TestConstructor;
 
 public class Song {
 
