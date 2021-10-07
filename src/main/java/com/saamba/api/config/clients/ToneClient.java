@@ -89,7 +89,7 @@ public class ToneClient implements ClientConfig {
                 mp.replace(ts.get(j).getToneName(), mp.get(ts.get(j).getToneName()+ts.get(j).getScore()));
             }
         }
-
+        normMap(mp);
         return mp;
     }
 
