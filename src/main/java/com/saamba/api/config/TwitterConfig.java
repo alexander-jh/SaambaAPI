@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -128,4 +129,24 @@ public class TwitterConfig implements ClientConfig {
         }
         return l;
     }
+
+    // TODO: populate map
+    private Map<String, String> artistMap = new HashMap<>();
+    /**
+     *
+     * @param accountName   - string twitter handle
+     * @return              - a list of the accounts they are following
+     */
+    public List<String> getFollowingList(String accountName){
+        List<String> uL = twitterClient.getFollowersIds(twitterClient.getUserFromUserName(accountName).getId());
+        List<String> uL2 = new ArrayList<>();
+        for (String s: uL
+             ) {
+            if(artistMap.containsKey(twitterClient.getUserFromUserId(s).getName())) {
+                uL2.add(twitterClient.getUserFromUserId(s).getName());
+            }
+        }
+        return uL2;
+    }
+
 }
