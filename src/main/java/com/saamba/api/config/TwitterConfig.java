@@ -14,7 +14,9 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 @Slf4j
@@ -93,10 +95,10 @@ public class TwitterConfig implements ClientConfig {
      * @param accountName   - string twitter handle
      * @return              - a list of tweet objects
      */
-    public List<Tweet> getTweets(String accountName) {
+    private List<Tweet> getTweets(String accountName) {
         Tweet t;
         List<Tweet> tweets = new ArrayList<>();
-        for(TweetV2.TweetData td : twitterClient.getUserTimeline(
+        for (TweetV2.TweetData td : twitterClient.getUserTimeline(
                 twitterClient.getUserFromUserName(accountName).getId(),
                 AdditionalParameters.builder()
                         .recursiveCall(false)
@@ -110,4 +112,41 @@ public class TwitterConfig implements ClientConfig {
         }
         return tweets;
     }
+
+    /**
+     *
+     * @param accountName   - string twitter handle
+     * @return              - a list of the text from tweets
+     */
+    public List<String> tweetTexts(String accountName){
+        List<Tweet> twl = getTweets(accountName);
+        List<String> l = new ArrayList<>();
+        int i = 0;
+        while(i<twl.toArray().length){
+            Tweet t = twl.get(i);
+            l.add(t.getMessage());
+            i++;
+        }
+        return l;
+    }
+
+    // TODO: populate map
+    private Map<String, String> artistMap = new HashMap<>();
+    /**
+     *
+     * @param accountName   - string twitter handle
+     * @return              - a list of the accounts they are following
+     */
+    public List<String> getFollowingList(String accountName){
+        List<String> uL = twitterClient.getFollowersIds(twitterClient.getUserFromUserName(accountName).getId());
+        List<String> uL2 = new ArrayList<>();
+        for (String s: uL
+             ) {
+            if(artistMap.containsKey(twitterClient.getUserFromUserId(s).getName())) {
+                uL2.add(twitterClient.getUserFromUserId(s).getName());
+            }
+        }
+        return uL2;
+    }
+
 }
