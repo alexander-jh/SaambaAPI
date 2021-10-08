@@ -126,7 +126,6 @@ public class Song {
         return this.artists;
     }
 
-
     public String getTitle() {
         return this.title;
     }

@@ -10,8 +10,8 @@ import okhttp3.Response;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.safety.Whitelist;
-import org.jsoup.select.Elements;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.configurationprocessor.json.JSONArray;
@@ -97,8 +97,9 @@ public class GeniusClient implements ClientConfig {
         String text = "";
         try {
             lyricsPage = Jsoup.connect(url).userAgent(userAgent).get();
-            Elements lyricsDiv = lyricsPage.select(".lyrics");
-            if(!lyricsDiv.isEmpty()) {
+            Element lyricsDiv = lyricsPage.getElementById("lyrics-root");
+//            System.out.println(lyricsDiv);
+            if(lyricsDiv != null) {
                 text = Jsoup.clean(lyricsDiv.html(), Whitelist.none()
                         .addTags("br")).trim();
                 Pattern pattern = Pattern.compile("\\[.+\\]");
@@ -113,7 +114,7 @@ public class GeniusClient implements ClientConfig {
                 }
                 if (builder.length() > 5)
                     builder.delete(builder.length() - 5, builder.length());
-                text = builder.toString().replaceAll("<br> ", " ");
+                text = builder.toString().replaceAll("<br>", " ");
             }
         } catch (IOException e) {
             log.error("Failed to parse lyrics for " + url + ".");
@@ -172,7 +173,7 @@ public class GeniusClient implements ClientConfig {
         sb.append(apiHost).append(searchRequest).append(title);
         for(String str : artists)
             sb.append(" ").append(str);
-        return sb.toString();
+        return sb.toString().replaceAll(" ", "%20");
     }
 
     @Override

@@ -8,10 +8,7 @@ import com.saamba.api.enums.ClientTypes;
 import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 import com.wrapper.spotify.model_objects.credentials.AuthorizationCodeCredentials;
-import com.wrapper.spotify.model_objects.specification.ArtistSimplified;
-import com.wrapper.spotify.model_objects.specification.Recommendations;
-import com.wrapper.spotify.model_objects.specification.Track;
-import com.wrapper.spotify.model_objects.specification.TrackSimplified;
+import com.wrapper.spotify.model_objects.specification.*;
 import com.wrapper.spotify.requests.data.browse.miscellaneous.GetAvailableGenreSeedsRequest;
 
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +19,7 @@ import org.apache.hc.core5.http.ParseException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.*;
 
@@ -52,6 +50,15 @@ public class SpotifyClient implements ClientConfig {
 
     @Value("${client.spotify.timeout}")
     private int timeout;
+
+    @Value("${client.spotify.song.max}")
+    private int songsPerGenre;
+
+    @Value("${client.spotify.artist.max}")
+    private int songsPerArtist;
+
+    @Resource(name = "genius")
+    GeniusClient geniusClient;
 
     private final CountryCode countryCode = CountryCode.US;
 
@@ -122,6 +129,7 @@ public class SpotifyClient implements ClientConfig {
      * @return          - list of songs in a genre
      */
     public synchronized List<Song> getSongs(String genre) {
+        int songCount = 0;
         List<Song> songs = new ArrayList<>();
         try {
             // Get most popular songs in the genre
@@ -135,9 +143,9 @@ public class SpotifyClient implements ClientConfig {
             // Timeout necessary not to exceed Spotify's limits
             wait(timeout);
             // For each song get the artists
-            for(TrackSimplified ts : recommendations.getTracks())
+            for(TrackSimplified ts : recommendations.getTracks()) {
                 // Seed each artist to get most popular songs
-                for(ArtistSimplified a : ts.getArtists()) {
+                for (ArtistSimplified a : ts.getArtists()) {
                     Track[] artists = spotifyClient
                             .getArtistsTopTracks(a.getId(), countryCode)
                             .build()
@@ -145,13 +153,24 @@ public class SpotifyClient implements ClientConfig {
                     wait(timeout);
                     // Parse each song
                     for (Track t : artists) {
-                        songs.add(new Song(t, spotifyClient
+                        AudioFeatures af = spotifyClient
                                 .getAudioFeaturesForTrack(t.getId())
                                 .build()
-                                .execute()));
+                                .execute();
+                        if (af != null) {
+                            Song s = new Song(t, af);
+                            s.setLyrics(geniusClient.getLyrics(s.getTitle(), s.getArtists()));
+                            songs.add(s);
+                            // Breakpoint if thresholds are passed
+                            if(songs.size() > songsPerArtist)
+                                break;
+                            if(songs.size() > songsPerGenre)
+                                return songs;
+                        }
                         wait(timeout);
                     }
                 }
+            }
         } catch (IOException | SpotifyWebApiException | ParseException | InterruptedException e) {
             log.error("Failed to retrieve songs from Spotify.", e);
         }

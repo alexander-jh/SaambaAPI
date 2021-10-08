@@ -1,27 +1,20 @@
 package com.saamba.api.entity.user;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
+import lombok.*;
 
-import java.io.Serializable;
-
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @DynamoDBDocument
-public class Tweet implements Serializable {
+public class Tweet {
+
+    @DynamoDBAttribute(attributeName = "date")
     private String date;
+
+    @DynamoDBAttribute(attributeName = "message")
     private String message;
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 }

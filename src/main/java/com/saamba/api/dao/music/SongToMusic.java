@@ -2,21 +2,39 @@ package com.saamba.api.dao.music;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.saamba.api.config.clients.GeniusClient;
 import com.saamba.api.entity.music.Music;
+import com.saamba.api.enums.GenreConstants;
+import com.saamba.api.utils.ThreadPool;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Converts DAO POJO for a song and creates the entity object
  * for CRUD and DB related actions.
  */
+@Slf4j
 @Component
 public class SongToMusic {
 
+    @Value("${utils.task.max}")
+    private int taskMax;
+
+    @Value("${client.spotify.thread.limit}")
+    private int threadMax;
+
     @Autowired
     private DynamoDBMapper dynamoDBMapper;
+
+    @Autowired
+    private GeniusClient geniusClient;
 
     /**
      * Converts a song to the entity music representation and inserts
@@ -98,9 +116,42 @@ public class SongToMusic {
     public List<Music> getGenre(String g) {
         DynamoDBQueryExpression<Music> query =
                 new DynamoDBQueryExpression<>();
-        Music hashKeyValues = new Music();
-        hashKeyValues.setGenre(g);
+        Music hashKeyValues = Music.builder().genre(g).build();
         query.setHashKeyValues(hashKeyValues);
         return dynamoDBMapper.query(Music.class, query);
+    }
+
+    public void fillEmptyLyrics() {
+        ThreadPool threadPool = new ThreadPool(taskMax, threadMax);
+        log.info("Thread pool instantiating.");
+        for(String g : GenreConstants.genres) {
+            try {
+                threadPool.execute( () -> {
+                    log.info("Starting lyrics update for genre " + g + ".");
+                    Map<String, AttributeValue> lyrics = new HashMap<>();
+                    lyrics.put(":noLyrics", new AttributeValue().withN("0"));
+                    DynamoDBQueryExpression<Music> query =
+                            new DynamoDBQueryExpression<>();
+                    query.setHashKeyValues(Music.builder().genre(g).build());
+                    query.withFilterExpression("hasLyrics = :noLyrics")
+                            .withExpressionAttributeValues(lyrics)
+                            .withLimit(100)
+                            .withConsistentRead(false);
+                    List<Music> noLyrics = dynamoDBMapper.query(Music.class, query);
+                    log.info("Updating lyrics for " + noLyrics.size() + " in genre " + g + ".");
+                    for(Music m : noLyrics) {
+                        m.setLyrics(geniusClient.getLyrics(m.getTitle(), m.getArtists()));
+                        m.setHasLyrics((m.getLyrics().length() > 0));
+                        dynamoDBMapper.save(m);
+                    }
+                    log.info("Completed updating lyrics for " + g + ".");
+                });
+            } catch(Exception e) {
+                log.error("Task in thread pool failed with exception ", e);
+            }
+        }
+        threadPool.waitForCompletion();
+        threadPool.stop();
+        log.info("Thread pool terminated.");
     }
 }

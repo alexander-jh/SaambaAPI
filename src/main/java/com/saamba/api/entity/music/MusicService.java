@@ -38,6 +38,8 @@ public class MusicService {
         musicDao.deleteMusic(uri, genre);
     }
 
+    public void fillEmptyLyrics() { musicDao.fillEmptyLyrics(); }
+
     /**
      * Converts music entity objects for each song by genre into
      * DAO song representation for exporting to JSON.

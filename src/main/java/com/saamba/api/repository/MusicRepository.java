@@ -7,6 +7,7 @@ import com.saamba.api.config.clients.SpotifyClient;
 import com.saamba.api.dao.music.Genre;
 import com.saamba.api.dao.music.Song;
 import com.saamba.api.entity.music.MusicService;
+import com.saamba.api.enums.GenreConstants;
 import com.saamba.api.utils.ThreadPool;
 
 import lombok.extern.slf4j.Slf4j;
@@ -73,6 +74,44 @@ public class MusicRepository {
         return "music updates completed";
     }
 
+    public String updateLyrics() {
+        log.info("Starting lyrics update.");
+        musicService.fillEmptyLyrics();
+        return "update of lyrics successful";
+    }
+
+    public String updateGenre(String genre) {
+        makeGenre(genre);
+        log.info("Update of genre " + genre + " completed.");
+        return "genre update completed.";
+    }
+
+    public String pullGenre(String genre) {
+        backfillJSON(genre);
+        log.info("Backfill of genre " + genre + " completed.");
+        return "successfully pulled json for genre";
+    }
+
+    public String backfillGenres() {
+        log.info("Starting backfill of all genres from music table in dynamodb.");
+        ThreadPool threadPool = new ThreadPool(taskMax, threadMax);
+        log.info("Instantiating thread pool with " + threadMax +
+                " threads and " + taskMax + " tasks.");
+        for(String g : GenreConstants.genres) {
+            try {
+                log.info("Backfilling genre " + g + " .");
+                threadPool.execute(() -> backfillJSON(g));
+                log.info("Backfill of genre " + g + " complete.");
+            } catch(Exception e) {
+                log.error("Thread execution exceptions ", e);
+            }
+        }
+        threadPool.waitForCompletion();
+        threadPool.stop();
+        log.info("Thread pool terminated.");
+        return "all genres backfilled";
+    }
+
     /**
      * Uses music service bean to update the database with the newly
      * pulled song data.
@@ -90,7 +129,6 @@ public class MusicRepository {
             else
                 musicService.updateLyrics(s, genre);
         }
-        backfillJSON(g);
         log.info("Genre " + g + " has finished processing.");
     }
 

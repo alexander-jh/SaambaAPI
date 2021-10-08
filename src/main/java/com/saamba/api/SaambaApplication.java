@@ -13,11 +13,7 @@ import javax.annotation.Resource;
 /**
  * I will consistently try to pool a working task list into this
  * centralized class.
- * TODO : Tie together discovery client and twitter client in user repo
- * TODO : Test /getPlaylist call
- * TODO : Implement user entity
  * TODO : Tie JUnit testing into GitHub workflow
- * TODO : Test DDB actions for spotify queries
  * TODO : Test cases for discovery client
  * TODO : Test cases for tone analyzer client
  * TODO : Test cases for twitter config
@@ -31,6 +27,39 @@ public class SaambaApplication {
     @Resource(name = "user")
     private UserRepository entityRepo;
 
+    @Resource(name = "music")
+    private MusicRepository musicRepo;
+
+    @GetMapping("/updateMusic")
+    public String updateMusic() {
+        log.info("Starting API call /updateMusic.");
+        return musicRepo.updateMusic();
+    }
+
+    @PutMapping("/updateLyrics")
+    public String updateLyrics() {
+        log.info("Updating lyrics for all songs in music table without lyrics.");
+        return musicRepo.updateLyrics();
+    }
+
+    @PutMapping("/backfillJson")
+    public String backfillJson() {
+        log.info("Request to backfill songs to json received.");
+        return musicRepo.backfillGenres();
+    }
+
+    @PutMapping("/pullGenre/{genre}")
+    public String pullGenre(@PathVariable String genre) {
+        log.info("Conducting singular backfill for " + genre + " .");
+        return musicRepo.pullGenre(genre);
+    }
+
+    @PutMapping("/updateGenre/{genre}")
+    public String updateGenre(@PathVariable String genre) {
+        log.info("Searching for newest music from Spotify for " + genre + " .");
+        return musicRepo.updateGenre(genre);
+    }
+
     /**
      * API end point which returns JSON string to caller via get request
      * from a user's Twitter handle.
@@ -41,18 +70,6 @@ public class SaambaApplication {
     public String getPlaylist(@PathVariable String accountName) {
         log.info("Starting API call /getPlaylist/" + accountName);
         return entityRepo.getPlaylist(accountName);
-    }
-
-/*
-    Functionality degraded for the sake of first milestone.
-
-    @Resource(name = "music")
-    private MusicRepository musicRepo;
-
-    @GetMapping("/updateMusic")
-    public String updateMusic() {
-        log.info("Starting API call /updateMusic.");
-        return musicRepo.updateMusic();
     }
 
     @PostMapping("/saveUser")
@@ -78,8 +95,6 @@ public class SaambaApplication {
         log.info("Starting API call /editUser.");
         return entityRepo.editUser(user);
     }
-
-*/
 
     /**
      * Entry point for application.
