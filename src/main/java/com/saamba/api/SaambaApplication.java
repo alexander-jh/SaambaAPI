@@ -50,13 +50,13 @@ public class SaambaApplication {
 
     @PutMapping("/pullGenre/{genre}")
     public String pullGenre(@PathVariable String genre) {
-        log.info("Conducting singular backfill for " + genre + " .");
+        log.info("Conducting singular backfill for " + genre + ".");
         return musicRepo.pullGenre(genre);
     }
 
     @PutMapping("/updateGenre/{genre}")
     public String updateGenre(@PathVariable String genre) {
-        log.info("Searching for newest music from Spotify for " + genre + " .");
+        log.info("Searching for newest music from Spotify for " + genre + ".");
         return musicRepo.updateGenre(genre);
     }
 

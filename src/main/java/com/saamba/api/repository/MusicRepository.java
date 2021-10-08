@@ -81,9 +81,9 @@ public class MusicRepository {
     }
 
     public String updateGenre(String genre) {
-        makeGenre(genre);
+        makeGenreSynch(genre);
         log.info("Update of genre " + genre + " completed.");
-        return "genre update completed.";
+        return genre + " update completed.";
     }
 
     public String pullGenre(String genre) {
@@ -129,6 +129,33 @@ public class MusicRepository {
             else
                 musicService.updateLyrics(s, genre);
         }
+        log.info("Genre " + g + " has finished processing.");
+    }
+
+    private void makeGenreSynch(String g) {
+        log.info("Creating genre " + g + ".");
+        Genre genre = new Genre(g);
+        List<Song> songs = spotify.getSongs(g);
+        log.info("Genre " + g + " has " + songs.size() + " songs.");
+        ThreadPool threadPool = new ThreadPool(taskMax, threadMax);
+        log.info("Instantiating thread pool with " + threadMax +
+                " threads and " + taskMax + " tasks.");
+        for(Song s : songs) {
+            try {
+                threadPool.execute(() -> {
+                    s.setLyrics(genius.getLyrics(s.getTitle(), s.getArtists()));
+                    if(!musicService.songExists(s.getURI(), g))
+                        musicService.createMusic(s, genre);
+                    else
+                        musicService.updateLyrics(s, genre);
+                });
+            } catch(Exception e) {
+                log.error("Thread pool for updateGenre failed on " + g + ".");
+            }
+        }
+        threadPool.waitForCompletion();
+        threadPool.stop();
+        log.info("Thread pool for updateGenre " + genre + " terminated.");
         log.info("Genre " + g + " has finished processing.");
     }
 

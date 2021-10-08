@@ -1,7 +1,9 @@
 package com.saamba.api.dao.music;
 
+import com.amazonaws.AbortedException;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
+import com.amazonaws.services.dynamodbv2.model.AmazonDynamoDBException;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.saamba.api.config.clients.GeniusClient;
 import com.saamba.api.entity.music.Music;
@@ -43,25 +45,29 @@ public class SongToMusic {
      * @param genre - genre object
      */
     public void createMusic(Song song, Genre genre) {
-        Music music = Music.builder()
-                .genre(genre.getGenre())
-                .uri(song.getURI())
-                .title(song.getTitle())
-                .lyrics(song.getLyrics())
-                .hasLyrics(song.getLyrics().length() > 0)
-                .artists(song.getArtists())
-                .acousticness(song.getAcousticness())
-                .danceability(song.getDanceability())
-                .energy(song.getEnergy())
-                .instrumentalness(song.getInstrumentalness())
-                .key(song.getKey())
-                .liveness(song.getLiveness())
-                .loudness(song.getLoudness())
-                .speechiness(song.getSpeechiness())
-                .tempo(song.getTempo())
-                .valence(song.getValence())
-                .build();
-        dynamoDBMapper.save(music);
+        try {
+            Music music = Music.builder()
+                    .genre(genre.getGenre())
+                    .uri(song.getURI())
+                    .title(song.getTitle())
+                    .lyrics(song.getLyrics())
+                    .hasLyrics(song.getLyrics().length() > 0)
+                    .artists(song.getArtists())
+                    .acousticness(song.getAcousticness())
+                    .danceability(song.getDanceability())
+                    .energy(song.getEnergy())
+                    .instrumentalness(song.getInstrumentalness())
+                    .key(song.getKey())
+                    .liveness(song.getLiveness())
+                    .loudness(song.getLoudness())
+                    .speechiness(song.getSpeechiness())
+                    .tempo(song.getTempo())
+                    .valence(song.getValence())
+                    .build();
+            dynamoDBMapper.save(music);
+        } catch(AmazonDynamoDBException | AbortedException e) {
+            log.error("Music entry beyond the size limit for DynamoDB table.");
+        }
     }
 
     /**
@@ -75,7 +81,11 @@ public class SongToMusic {
         if(music != null && !music.getHasLyrics()) {
             music.setLyrics(song.getLyrics());
             music.setHasLyrics(true);
-            dynamoDBMapper.save(music);
+            try {
+                dynamoDBMapper.save(music);
+            } catch(AbortedException e) {
+                log.error("Failed to write " + song + " to table.");
+            }
         }
     }
 
@@ -96,7 +106,12 @@ public class SongToMusic {
      * @return      - entity object for song
      */
     public Music getMusic(String uri, String genre) {
-        return dynamoDBMapper.load(Music.class, genre, uri);
+        try {
+            return dynamoDBMapper.load(Music.class, genre, uri);
+        } catch(AbortedException e) {
+            log.error("DynamoDB aborted do to access issue for " + uri + " " + genre + ".");
+            return null;
+        }
     }
 
     /**
