@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,11 +40,13 @@ public class UserRepository {
      * @param accountName   - string twitter handle passed in url
      * @return              - formatted JSON string of playlist
      */
-    public String getPlaylist(String accountName) {
-        return discoveryClient.findSongs(
+    public String[] getPlaylist(String accountName, MusicRepository musicRepo) {
+        ArrayList<String[]> songsAndArtists =  discoveryClient.findSongs(
                 toneClient.analyzeText(
                         twitterConfig.getPinnedTweet(
                                 accountName)));
+        String[] trackUris = musicRepo.searchSongs(songsAndArtists);
+        return trackUris;
     }
 
     /**

@@ -10,7 +10,12 @@ import com.saamba.api.entity.music.MusicService;
 import com.saamba.api.enums.GenreConstants;
 import com.saamba.api.utils.ThreadPool;
 
+import com.wrapper.spotify.enums.ModelObjectType;
+import com.wrapper.spotify.exceptions.SpotifyWebApiException;
+import com.wrapper.spotify.model_objects.special.SearchResult;
+import com.wrapper.spotify.requests.data.search.SearchItemRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.hc.core5.http.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
@@ -20,6 +25,7 @@ import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -193,4 +199,43 @@ public class MusicRepository {
         genreToJSON(musicService.exportGenre(g));
         log.info("Genre " + g + " successfully backfilled.");
     }
+
+    public String createPlaylist (ArrayList<String[]> songs){
+        // Gets the Song uris
+        String[] trackUris = searchSongs(songs);
+
+        // Create Empty Playlist
+
+        // Add songs to the playlist
+        for(int i = 0; i < trackUris.length; i++){
+            // Add song to playlist
+            addSongToPlayist(trackUris[i], "PLAYLIST LINK");
+        }
+
+        return ""; // return playlist link
+    }
+
+    public String[] searchSongs(ArrayList<String[]> songs){
+        String[] trackUris = new String[songs.size()];
+        int skips = 0;
+
+        for(int i = 0; i < songs.size(); i++){
+            String uri = spotify.searchSong(songs.get(i)[0] + ", " + songs.get(i)[1]);
+
+            if (uri.length() != 0){
+                trackUris[i - skips] = uri;
+            }
+            else {
+                skips++;
+            }
+        }
+
+        return trackUris;
+    }
+
+    private void addSongToPlayist(String uri, String playlist){
+        // TODO
+    }
+
+
 }

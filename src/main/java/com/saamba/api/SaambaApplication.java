@@ -67,9 +67,9 @@ public class SaambaApplication {
      * @return              - JSON string of spotify URI
      */
     @GetMapping("/getPlaylist/{accountName}")
-    public String getPlaylist(@PathVariable String accountName) {
+    public String[] getPlaylist(@PathVariable String accountName) {
         log.info("Starting API call /getPlaylist/" + accountName);
-        return entityRepo.getPlaylist(accountName);
+        return entityRepo.getPlaylist(accountName, musicRepo);
     }
 
     @PostMapping("/saveUser")

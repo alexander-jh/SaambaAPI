@@ -8,9 +8,12 @@ import com.saamba.api.enums.ClientTypes;
 import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 import com.wrapper.spotify.model_objects.credentials.AuthorizationCodeCredentials;
+import com.wrapper.spotify.model_objects.special.SearchResult;
 import com.wrapper.spotify.model_objects.specification.*;
 import com.wrapper.spotify.requests.data.browse.miscellaneous.GetAvailableGenreSeedsRequest;
 
+import com.wrapper.spotify.requests.data.search.SearchItemRequest;
+import com.wrapper.spotify.enums.ModelObjectType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -175,6 +178,29 @@ public class SpotifyClient implements ClientConfig {
             log.error("Failed to retrieve songs from Spotify.", e);
         }
         return songs;
+    }
+
+    public synchronized String searchSong(String song){
+        SearchItemRequest searchItemRequest = spotifyClient.searchItem(song, ModelObjectType.TRACK.getType())
+//          .market(CountryCode.SE)
+//          .limit(10)
+//          .offset(0)
+//          .includeExternal("audio")
+                .build();
+        String uri = "";
+
+        try {
+            final SearchResult searchResult = searchItemRequest.execute();
+
+            uri =  searchResult.getTracks().getItems()[0].getUri();
+
+//            System.out.println("Song Uri: " + searchResult.getTracks().getItems()[0].getUri());
+        } catch (IOException | SpotifyWebApiException | ArrayIndexOutOfBoundsException | ParseException e) {
+            System.out.println("Query: " + song);
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        return uri;
     }
 
     /**
