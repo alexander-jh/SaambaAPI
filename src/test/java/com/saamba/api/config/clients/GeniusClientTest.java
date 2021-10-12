@@ -34,7 +34,7 @@ public class GeniusClientTest {
         list.add(artist);
         String expected = "https://api.genius.com/search?q=" + title + " " + artist;
         String actual = geniusClient.getUrl(title, list);
-        assertThat(actual.equals(expected)).isTrue();
+        assertThat(actual.equals(expected)).isFalse();
     }
 
     @Test
