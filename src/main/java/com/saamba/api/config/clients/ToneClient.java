@@ -5,12 +5,19 @@ import com.ibm.watson.tone_analyzer.v3.ToneAnalyzer;
 import com.ibm.watson.tone_analyzer.v3.model.ToneOptions;
 import com.ibm.watson.tone_analyzer.v3.model.ToneScore;
 import com.saamba.api.config.ClientConfig;
+import com.saamba.api.dao.music.Genre;
+import com.saamba.api.dao.music.Song;
 import com.saamba.api.enums.ClientTypes;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.io.InterruptedIOException;
 import java.util.*;
 
+@Service
+@Slf4j
 public class ToneClient implements ClientConfig {
 
     @Value("${client.ibm.tone.key}")
@@ -21,6 +28,9 @@ public class ToneClient implements ClientConfig {
 
     @Value("${client.ibm.tone.date}")
     private String apiDate;
+
+    @Value("${client.ibm.tone.max}")
+    private int toneMax;
 
     private ToneAnalyzer toneAnalyzer;
 
@@ -68,6 +78,30 @@ public class ToneClient implements ClientConfig {
                 .get(0)
                 .getToneName();
     }
+
+    /**
+     * Returns the list of all tones for a given json string.
+     * @param genre - genre POJO
+     * @return      - list of (tone, score) pairs
+     */
+    public List<ToneScore> getTones(Genre genre) {
+        String text = sampleLyrics(genre);
+        try {
+            return (text.length() > 0) ?
+                    toneAnalyzer.tone(new ToneOptions.Builder()
+                                    .text(text)
+                                    .build())
+                            .execute()
+                            .getResult()
+                            .getDocumentTone()
+                            .getTones()
+                    : new ArrayList<ToneScore>();
+        } catch(RuntimeException e) {
+            log.error("Error in tone analyzing for genre " + genre.getGenre());
+            return new ArrayList<ToneScore>();
+        }
+    }
+
     /**
      * Returns the proportions of tones from a list of text.
      * @param l         - a list of text from users tweets
@@ -117,6 +151,19 @@ public class ToneClient implements ClientConfig {
         for (String s :toneList ) {
             mp.replace(s, mp.get(s)/sum);
         }
+    }
+
+    private String sampleLyrics(Genre g) {
+        StringBuilder lyricSample = new StringBuilder();
+        if(g == null) return "";
+        List<Song> songs = g.getSongs();
+        for(Song s : songs) {
+            if(s.getLyrics() != null && lyricSample.length () + s.getLyrics().length() < toneMax)
+                lyricSample.append(" ").append(s.getLyrics());
+            else
+                break;
+        }
+        return lyricSample.toString();
     }
 
 }

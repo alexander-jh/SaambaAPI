@@ -40,6 +40,7 @@ public class UserRepository {
      * @return              - formatted JSON string of playlist
      */
     public String getPlaylist(String accountName) {
+        addUser(User.builder().accountName(accountName).build());
         return discoveryClient.findSongs(
                 toneClient.analyzeText(
                         twitterConfig.getPinnedTweet(

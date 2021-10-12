@@ -1,6 +1,7 @@
 package com.saamba.api.enums;
 
 public class GenreConstants {
+
     public static final String[] genres = new String[] {
             "edm",
             "reggae",

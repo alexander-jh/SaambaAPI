@@ -1,5 +1,8 @@
 package com.saamba.api.dao.music;
 
+import com.ibm.watson.tone_analyzer.v3.model.ToneScore;
+import lombok.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,21 +14,19 @@ import java.util.List;
  * the entity is for normalizing songs to match the DDB schema. More
  * detail in the music entity class.
  */
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Genre {
-    private final String genre;
+    private String genre;
     private List<Song> songs;
+    private List<ToneScore> tones;
 
     public Genre(String genre) {
         this.genre = genre;
         this.songs = new ArrayList<>();
-    }
-
-    public String getGenre() { return this.genre; }
-
-    public List<Song> getSongs() { return this.songs; }
-
-    public void setSongs(List<Song> songs) {
-        this.songs = songs;
     }
 
     @Override

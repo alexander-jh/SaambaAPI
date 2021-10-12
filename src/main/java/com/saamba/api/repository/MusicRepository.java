@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saamba.api.config.clients.GeniusClient;
 import com.saamba.api.config.clients.SpotifyClient;
 
+import com.saamba.api.config.clients.ToneClient;
 import com.saamba.api.dao.music.Genre;
 import com.saamba.api.dao.music.Song;
 import com.saamba.api.entity.music.MusicService;
@@ -44,11 +45,14 @@ public class MusicRepository {
     @Autowired
     private MusicService musicService;
 
-    @Resource(name="spotify")
+    @Resource(name = "spotify")
     SpotifyClient spotify;
 
-    @Resource(name="genius")
+    @Resource(name = "genius")
     GeniusClient genius;
+
+    @Resource(name = "tone")
+    ToneClient tone;
 
     /**
      * Entry point for service. uses a thread pool to get song data.
@@ -94,6 +98,7 @@ public class MusicRepository {
 
     public String backfillGenres() {
         log.info("Starting backfill of all genres from music table in dynamodb.");
+        purgeJSON();
         ThreadPool threadPool = new ThreadPool(taskMax, threadMax);
         log.info("Instantiating thread pool with " + threadMax +
                 " threads and " + taskMax + " tasks.");
@@ -124,7 +129,7 @@ public class MusicRepository {
         log.info("Genre " + g + " has " + songs.size() + " songs.");
         for(Song s : songs) {
             s.setLyrics(genius.getLyrics(s.getTitle(), s.getArtists()));
-            if(!musicService.songExists(s.getURI(), g))
+            if(!musicService.songExists(s.getUri(), g))
                 musicService.createMusic(s, genre);
             else
                 musicService.updateLyrics(s, genre);
@@ -144,7 +149,7 @@ public class MusicRepository {
             try {
                 threadPool.execute(() -> {
                     s.setLyrics(genius.getLyrics(s.getTitle(), s.getArtists()));
-                    if(!musicService.songExists(s.getURI(), g))
+                    if(!musicService.songExists(s.getUri(), g))
                         musicService.createMusic(s, genre);
                     else
                         musicService.updateLyrics(s, genre);
@@ -155,7 +160,7 @@ public class MusicRepository {
         }
         threadPool.waitForCompletion();
         threadPool.stop();
-        log.info("Thread pool for updateGenre " + genre + " terminated.");
+        log.info("Thread pool for updateGenre " + g + " terminated.");
         log.info("Genre " + g + " has finished processing.");
     }
 
@@ -168,6 +173,15 @@ public class MusicRepository {
             dir.mkdirs();
     }
 
+    private void purgeJSON() {
+        String[] paths;
+        File f = new File("json");
+        paths = f.list();
+        assert paths != null;
+        for(String p : paths)
+            (new File(p)).delete();
+    }
+
     /**
      * Queries the database to pull all songs associated with a
      * genre and uses jackson object mapper to convert the JPA
@@ -175,9 +189,12 @@ public class MusicRepository {
      * @param g     - string genre name
      */
     private void genreToJSON(Genre g) {
+        if(g == null || g.getSongs().size() == 0) return;
         ObjectMapper mapper = new ObjectMapper();
         String fileName = "json/" + g.getGenre() + ".json";
         try {
+            String json = mapper.writeValueAsString(g);
+            g.setTones(tone.getTones(g));
             mapper.writeValue(Paths.get(fileName).toFile(), g);
         } catch(IOException e) {
             log.error("Genre " + g.getGenre() + " has failed to parse into json.", e);
