@@ -129,7 +129,6 @@ public class SpotifyClient implements ClientConfig {
      * @return          - list of songs in a genre
      */
     public synchronized List<Song> getSongs(String genre) {
-        int songCount = 0;
         List<Song> songs = new ArrayList<>();
         try {
             // Get most popular songs in the genre

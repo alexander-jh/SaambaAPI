@@ -193,7 +193,6 @@ public class MusicRepository {
         ObjectMapper mapper = new ObjectMapper();
         String fileName = "json/" + g.getGenre() + ".json";
         try {
-            String json = mapper.writeValueAsString(g);
             g.setTones(tone.getTones(g));
             mapper.writeValue(Paths.get(fileName).toFile(), g);
         } catch(IOException e) {
