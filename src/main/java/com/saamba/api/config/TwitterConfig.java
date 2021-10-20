@@ -121,9 +121,8 @@ public class TwitterConfig implements ClientConfig {
         List<String> l = new ArrayList<>();
         int i = 0;
         while(i<twl.toArray().length){
-            Tweet t = twl.get(i);
+            Tweet t = twl.get(i++);
             l.add(t.getMessage());
-            i++;
         }
         return l;
     }
@@ -165,7 +164,6 @@ public class TwitterConfig implements ClientConfig {
         List<Map.Entry<String, Integer>> frequencyList = new ArrayList<Map.Entry<String, Integer>>(hm.entrySet());
         frequencyList.sort(Comparator.comparing(Map.Entry<String, Integer>::getValue).reversed());
         return frequencyList.get(0).getKey();
-
     }
 
 }

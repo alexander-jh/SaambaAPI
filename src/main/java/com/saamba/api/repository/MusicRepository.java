@@ -46,13 +46,13 @@ public class MusicRepository {
     private MusicService musicService;
 
     @Resource(name = "spotify")
-    SpotifyClient spotify;
+    private SpotifyClient spotify;
 
     @Resource(name = "genius")
-    GeniusClient genius;
+    private GeniusClient genius;
 
     @Resource(name = "tone")
-    ToneClient tone;
+    private ToneClient tone;
 
     /**
      * Entry point for service. uses a thread pool to get song data.
