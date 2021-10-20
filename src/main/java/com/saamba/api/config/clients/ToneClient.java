@@ -7,10 +7,12 @@ import com.ibm.watson.tone_analyzer.v3.model.ToneScore;
 import com.saamba.api.config.ClientConfig;
 import com.saamba.api.enums.ClientTypes;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
 
+@Service
 public class ToneClient implements ClientConfig {
 
     @Value("${client.ibm.tone.key}")
@@ -50,9 +52,9 @@ public class ToneClient implements ClientConfig {
         // Not necessary
     }
 
-    private final List<String> toneList = Arrays.asList("openness", "anger", "disgust", "fear", "sadness",
-            "joy", "conscientiousness", "extroversion", "emotional range",
-            "analytical", "confident", "tentative", "agreeableness" );
+    private final List<String> toneList = Arrays.asList("Openness", "Anger", "Disgust", "Fear", "Sadness",
+            "Joy", "Conscientiousness", "Extroversion", "Emotional range",
+            "Analytical", "Confident", "Tentative", "Agreeableness" );
 
     /**
      * Returns the primary tone from a string of text.
@@ -79,15 +81,16 @@ public class ToneClient implements ClientConfig {
         int i = 0;
         // iterate over all the tweets
         while(i<l.size()){
-            List<ToneScore> ts = toneAnalyzer.tone(new ToneOptions.Builder().text(l.get(i)).build())
+            List<ToneScore> ts = toneAnalyzer.tone(new ToneOptions.Builder().text(l.get(i).toString()).build())
                     .execute()
                     .getResult()
                     .getDocumentTone()
                     .getTones();
             // iterate over all the tones in a single tweet
-            for(int j =0; j<ts.size();j++){
-                mp.replace(ts.get(j).getToneName(), mp.get(ts.get(j).getToneName()+ts.get(j).getScore()));
+            for(ToneScore t : ts){
+                mp.replace(t.getToneName(), mp.get(t.getToneName())+t.getScore());
             }
+            i++;
         }
         normMap(mp);
         return mp;
