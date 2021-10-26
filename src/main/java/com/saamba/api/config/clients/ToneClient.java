@@ -122,4 +122,32 @@ public class ToneClient implements ClientConfig {
         }
     }
 
+    public String getMaxTone(List<String> l){
+        Map<String, Double> mp = new HashMap<>();
+        fillMap(mp);
+        int i = 0;
+        // iterate over all the tweets
+        while(i<l.size()){
+            List<ToneScore> ts = toneAnalyzer.tone(new ToneOptions.Builder().text(l.get(i)).build())
+                    .execute()
+                    .getResult()
+                    .getDocumentTone()
+                    .getTones();
+            // iterate over all the tones in a single tweet
+            for(ToneScore t : ts){
+                mp.put(t.getToneName(), mp.get(t.getToneName())+t.getScore());
+            }
+            i++;
+        }
+        String tone = "";
+        Double max = 0.0;
+        for(Map.Entry<String, Double> pair : mp.entrySet()) {
+            if(pair.getValue() > max) {
+                tone = pair.getKey();
+                max = pair.getValue();
+            }
+        }
+        return tone;
+    }
+
 }

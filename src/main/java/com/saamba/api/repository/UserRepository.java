@@ -40,10 +40,9 @@ public class UserRepository {
      * @return              - formatted JSON string of playlist
      */
     public String getPlaylist(String accountName) {
-        return discoveryClient.findSongs(
-                toneClient.analyzeText(
-                        twitterConfig.getPinnedTweet(
-                                accountName)));
+        String concept = twitterConfig.getConcepts(twitterConfig.tweetTexts(accountName));
+        String tone =  toneClient.getMaxTone(twitterConfig.tweetTexts(accountName)).toString();
+        return discoveryClient.findSongs(tone, concept);
     }
 
     /**

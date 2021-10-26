@@ -65,17 +65,16 @@ public class DiscoveryClient implements ClientConfig {
     /**
      * Searches for song in discovery client based upon the seed query
      * string.
-     * @param seed      - string for query
+     * @param tone      - string for query
+     *
      * @return          - uri reference to spotify song
      */
-    public String findSongs(String seed) {
-        log.info("Starting query over Discovery collection for " + seed + " .");
-        QueryResponse query = discoveryClient.query(
-                        (new QueryOptions.Builder(envId, collectionId))
-                        .naturalLanguageQuery(seed)
-                        .build())
-                .execute()
-                .getResult();
-        return query.toString();
+    public String findSongs(String tone, String concept) {
+        log.info("Starting query over Discovery collection for " + tone + ", " + concept + " .");
+        QueryOptions.Builder queryBuilder = new QueryOptions.Builder(envId, collectionId);
+        queryBuilder.query("artist:\""+concept+"\"|lyrics:\""+concept+"\"|tone::\""+tone+"\"");
+        //queryBuilder.query("tone::\""+tone+"\",(artist:\""+concept+"\"|lyrics:\""+concept+"\")");
+        QueryResponse queryResponse = discoveryClient.query(queryBuilder.build()).execute().getResult();
+        return queryResponse.toString();
     }
 }
