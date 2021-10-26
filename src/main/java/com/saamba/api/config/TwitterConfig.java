@@ -97,17 +97,21 @@ public class TwitterConfig implements ClientConfig {
     private List<Tweet> getTweets(String accountName) {
         Tweet t;
         List<Tweet> tweets = new ArrayList<>();
-        for (TweetV2.TweetData td : twitterClient.getUserTimeline(
-                twitterClient.getUserFromUserName(accountName).getId(),
-                AdditionalParameters.builder()
-                        .recursiveCall(false)
-                        .maxResults(maxResults)
-                        .build()
-        ).getData()) {
-            t = new Tweet();
-            t.setDate(td.getCreatedAt().toString());
-            t.setMessage(td.getText());
-            tweets.add(t);
+        try {
+            for (TweetV2.TweetData td : twitterClient.getUserTimeline(
+                    twitterClient.getUserFromUserName(accountName).getId(),
+                    AdditionalParameters.builder()
+                            .recursiveCall(false)
+                            .maxResults(maxResults)
+                            .build()
+            ).getData()) {
+                t = new Tweet();
+                t.setDate(td.getCreatedAt().toString());
+                t.setMessage(td.getText());
+                tweets.add(t);
+            }
+        } catch (Exception e) {
+            //TODO: figure out graceful resolution to frontend
         }
         return tweets;
     }
@@ -118,6 +122,9 @@ public class TwitterConfig implements ClientConfig {
      * @return              - a list of the text from tweets
      */
     public List<String> tweetTexts(String accountName){
+        if(accountName.indexOf("@")==0){
+            accountName = accountName.substring(1);
+        }
         List<Tweet> twl = getTweets(accountName);
         List<String> l = new ArrayList<>();
         int i = 0;
@@ -144,12 +151,12 @@ public class TwitterConfig implements ClientConfig {
         return artistMap;
     }*/
 
-   /**
+ /*  /**
      *
      * @param accountName   - string twitter handle
      * @return              - a list of the accounts they are following
      */
-/*    public List<String> getFollowingList(String accountName){
+/*   public List<String> getFollowingList(String accountName){
         List<String> uL = twitterClient.getFollowersIds(twitterClient.getUserFromUserName(accountName).getId());
         List<String> uL2 = new ArrayList<>();
         for (String s: uL

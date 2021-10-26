@@ -117,8 +117,10 @@ public class ToneClient implements ClientConfig {
             sum+= mp.get(s);
         }
         // now replace old values with normalized values
-        for (String s :toneList ) {
-            mp.replace(s, mp.get(s)/sum);
+        if(!sum.equals(0.0)){
+            for (String s :toneList ) {
+                mp.replace(s, mp.get(s)/sum);
+            }
         }
     }
 
