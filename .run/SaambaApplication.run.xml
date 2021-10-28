@@ -1,0 +1,30 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="SaambaApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="Scraper" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.saamba.api.SaambaApplication" />
+    <option name="ACTIVE_PROFILES" value="dev" />
+    <option name="ALTERNATIVE_JRE_PATH" />
+    <option name="SHORTEN_COMMAND_LINE" value="NONE" />
+    <envs>
+      <env name="AWS_ACCESS_KEY" value="AKIA2JYTCLQN7GMJINV3" />
+      <env name="AWS_SECRET_KEY" value="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" />
+      <env name="GENIUS_TOKEN" value="XA8sOggbTWvXn4OpiP1HtQs5rJID9I_A7kkXaz6TD2AJSXBvksBNZ82b7sB5bVVc" />
+      <env name="IBM_DISCOVERY_COLID" value="b56e44f2-f9e6-45cf-a756-d3ba136575de" />
+      <env name="IBM_DISCOVERY_ENVID" value="1545d966-b84a-4b43-aa4f-3ea72e60c85d" />
+      <env name="IBM_DISCOVERY_KEY" value="W4yRKE--NoJJPHVMiOmu9LCWp5spX6Mqh5vbMi9mNlYT" />
+      <env name="IBM_DISCOVERY_URL" value="https://api.eu-gb.discovery.watson.cloud.ibm.com/instances/aba4f454-90dc-46d6-95ff-6b452df02617" />
+      <env name="IBM_TONE_KEY" value="VT8rLBabKfAk6k5rWo7hgxtbt55lJEXH10nbM-mfINRG" />
+      <env name="IBM_TONE_URL" value="https://api.au-syd.tone-analyzer.watson.cloud.ibm.com/instances/40fa6de1-a614-494d-8df5-de90ed5d30a6" />
+      <env name="SPOTIFY_ACCESS_KEY" value="3681033801214b1f9051438603d03bae" />
+      <env name="SPOTIFY_SECRET_KEY" value="d7020609582a48bcb7d31697c59ff147" />
+      <env name="TWITTER_ACCESS_KEY" value="6kjRr6R2aUhIiLruVqJmkMqSm" />
+      <env name="TWITTER_ACCESS_SECRET" value="jnDafGcWLCv5kPKDI251o2PcElCym2QaUn5MYcatHwRUGCDgan" />
+      <env name="TWITTER_ACCESS_TOKEN" value="764298631931432960-CI6gcp7LljnvczIw39dmJPZKOilOsT8" />
+      <env name="TWITTER_BEARER_TOKEN" value="AAAAAAAAAAAAAAAAAAAAAEe7TQEAAAAAGFax%2ByQ0JeH3%2F7ShLhC7gutWZ8k%3DoSsYxSUyCdgybGwkPlJiaAyNuV1sIBRnG6Fd94kWVufWZhvxE3" />
+      <env name="TWITTER_SECRET_KEY" value="scYrIE4CANo8kgKu8DhTU6N1mHeHmAQBXyUxL3n5EGrOg" />
+    </envs>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
