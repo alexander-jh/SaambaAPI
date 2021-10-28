@@ -1,6 +1,5 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="SaambaApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-    <module name="Scraper" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="com.saamba.api.SaambaApplication" />
     <option name="ACTIVE_PROFILES" value="dev" />
     <option name="ALTERNATIVE_JRE_PATH" />

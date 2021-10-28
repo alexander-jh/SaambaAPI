@@ -128,35 +128,41 @@ public class TwitterConfig implements ClientConfig {
         List<Tweet> twl = getTweets(accountName);
         List<String> l = new ArrayList<>();
         int i = 0;
-        while(i<twl.toArray().length){
-            Tweet t = twl.get(i);
-            l.add(t.getMessage());
-            i++;
+        if(twl.size()>0) {
+            while (i < twl.toArray().length) {
+                Tweet t = twl.get(i);
+                l.add(t.getMessage());
+                i++;
+            }
         }
+        // returns empty arraylist if no tweets, could change it to null if easier.
         return l;
     }
 
-/*    // TODO: populate map
     private Map<String, String> artistMap = fillArtistMap();
 
-    private Map<String, String> fillArtistMap() throws FileNotFoundException {
+    private Map<String, String> fillArtistMap() {
         Map<String, String> artistMap = new HashMap<>();
-        File f = new File("followerData.csv");
-        Scanner s = new Scanner(f);
-        while(s.hasNext()){
-            String str = s.nextLine();
-            System.out.println(str);
-            artistMap.put(str.substring(str.indexOf("@")), str.substring(0, str.indexOf("@")));
+        try{
+            System.out.println(new File(".").getAbsolutePath());
+            File f = new File("data/followerData.csv");
+            Scanner s = new Scanner(f);
+            while(s.hasNext()){
+                String str = s.nextLine();
+                artistMap.put(str.substring(str.indexOf("@")), str.substring(0, str.indexOf("@")));
+            }
+        }catch(Exception e){
+            e.printStackTrace();
         }
         return artistMap;
-    }*/
+    }
 
- /*  /**
+   /**
      *
      * @param accountName   - string twitter handle
      * @return              - a list of the accounts they are following
      */
-/*   public List<String> getFollowingList(String accountName){
+   public List<String> getFollowingList(String accountName){
         List<String> uL = twitterClient.getFollowersIds(twitterClient.getUserFromUserName(accountName).getId());
         List<String> uL2 = new ArrayList<>();
         for (String s: uL
@@ -166,7 +172,7 @@ public class TwitterConfig implements ClientConfig {
             }
         }
         return uL2;
-    }*/
+    }
 
    public String getConcepts(List<String> tweets) {
        WhitespaceTokenizer tokenizer = WhitespaceTokenizer.INSTANCE;

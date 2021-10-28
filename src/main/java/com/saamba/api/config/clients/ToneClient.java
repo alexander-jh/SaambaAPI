@@ -149,6 +149,7 @@ public class ToneClient implements ClientConfig {
                 max = pair.getValue();
             }
         }
+        // should return empty string if empty map
         return tone;
     }
 
