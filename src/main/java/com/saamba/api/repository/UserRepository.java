@@ -8,6 +8,7 @@ import com.saamba.api.config.TwitterConfig;
 import com.saamba.api.config.clients.DiscoveryClient;
 import com.saamba.api.config.clients.SpotifyClient;
 import com.saamba.api.config.clients.ToneClient;
+import com.saamba.api.dao.music.Playlist;
 import com.saamba.api.entity.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -44,12 +45,24 @@ public class UserRepository {
      * @param accountName   - string twitter handle passed in url
      * @return              - formatted JSON string of playlist
      */
-    public String[] getPlaylist(String accountName) {
-        String concept = twitterConfig.getConcepts(twitterConfig.tweetTexts(accountName));
-        String tone =  toneClient.getMaxTone(twitterConfig.tweetTexts(accountName)).toString();
-        List<String[]> songsAndArtists =  discoveryClient.findSongs(tone, concept)
+    public Playlist getPlaylist(String accountName) {
+        List<String> concepts = twitterConfig.getConcepts(twitterConfig.tweetTexts(accountName));
+        Map<String, Double> tones = toneClient.getMaxTone(twitterConfig.tweetTexts(accountName));
+
+        //get top tone
+        String tone = "";
+        Double max = 0.0;
+        for(Map.Entry<String, Double> pair : tones.entrySet()) {
+            if(pair.getValue() > max) {
+                tone = pair.getKey();
+                max = pair.getValue();
+            }
+        }
+
+        //query using just top tone and one concept
+        List<String[]> songsAndArtists =  discoveryClient.findSongs(tone, concepts.get(0));
         String[] trackUris = searchSongs(songsAndArtists);
-        return trackUris;
+        return new Playlist(trackUris, concepts, tones);
     }
 
     /**

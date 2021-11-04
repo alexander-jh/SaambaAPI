@@ -1,5 +1,7 @@
 package com.saamba.api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.saamba.api.dao.music.Playlist;
 import com.saamba.api.entity.user.User;
 import com.saamba.api.repository.MusicRepository;
 import com.saamba.api.repository.UserRepository;
@@ -67,9 +69,9 @@ public class SaambaApplication {
      * @return              - JSON string of spotify URI
      */
     @GetMapping("/getPlaylist/{accountName}")
-    public String[] getPlaylist(@PathVariable String accountName) {
+    public String getPlaylist(@PathVariable String accountName) throws JsonProcessingException {
         log.info("Starting API call /getPlaylist/" + accountName);
-        return entityRepo.getPlaylist(accountName);
+        return entityRepo.getPlaylist(accountName).toJSON();
     }
 
     @PostMapping("/saveUser")
