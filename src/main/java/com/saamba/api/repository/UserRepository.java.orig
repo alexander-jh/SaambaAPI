@@ -44,12 +44,20 @@ public class UserRepository {
      * @param accountName   - string twitter handle passed in url
      * @return              - formatted JSON string of playlist
      */
+<<<<<<< HEAD
     public String[] getPlaylist(String accountName) {
-        String concept = twitterConfig.getConcepts(twitterConfig.tweetTexts(accountName));
-        String tone =  toneClient.getMaxTone(twitterConfig.tweetTexts(accountName)).toString();
-        List<String[]> songsAndArtists =  discoveryClient.findSongs(tone, concept)
+        List<String[]> songsAndArtists =  discoveryClient.findSongs(
+                toneClient.analyzeText(
+                        twitterConfig.getPinnedTweet(
+                                accountName)));
         String[] trackUris = searchSongs(songsAndArtists);
         return trackUris;
+=======
+    public String getPlaylist(String accountName) {
+        String concept = twitterConfig.getConcepts(twitterConfig.tweetTexts(accountName));
+        String tone =  toneClient.getMaxTone(twitterConfig.tweetTexts(accountName)).toString();
+        return discoveryClient.findSongs(tone, concept);
+>>>>>>> origin/evenMoreData
     }
 
     /**

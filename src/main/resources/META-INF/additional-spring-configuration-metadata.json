@@ -1,0 +1,253 @@
+{
+  "properties": [
+    {
+      "name": "client.spotify.accesskey",
+      "type": "java.lang.String",
+      "description": "Description for client.Spotify.accessKey."
+    },
+    {
+      "name": "client.spotify.secretkey",
+      "type": "java.lang.String",
+      "description": "Description for client.spotify.secretKey."
+    },
+    {
+      "name": "client.ibm.accesskey",
+      "type": "java.lang.String",
+      "description": "Description for client.ibm.accesskey."
+    },
+    {
+      "name": "client.aws.accesskey",
+      "type": "java.lang.String",
+      "description": "Description for client.aws.accesskey."
+    },
+    {
+      "name": "client.aws.secretkey",
+      "type": "java.lang.String",
+      "description": "Description for client.aws.secretkey."
+    },
+    {
+      "name": "client.spotify.recommendation.limit",
+      "type": "java.lang.Integer",
+      "description": "Description for client.spotify.recommendation.limit."
+    },
+    {
+      "name": "client.spotify.popularity.limit",
+      "type": "java.lang.Integer",
+      "description": "Description for client.spotify.popularity.limit."
+    },
+    {
+      "name": "client.spotify.popularity.min",
+      "type": "java.lang.Integer",
+      "description": "Description for client.spotify.popularity.min."
+    },
+    {
+      "name": "client.genius.accesskey",
+      "type": "java.lang.String",
+      "description": "Description for client.genius.accesskey."
+    },
+    {
+      "name": "client.genius.secretkey",
+      "type": "java.lang.String",
+      "description": "Description for client.genius.secretkey."
+    },
+    {
+      "name": "client.genius.accesstoken",
+      "type": "java.lang.String",
+      "description": "Description for client.genius.accesstoken."
+    },
+    {
+      "name": "service.genius.url",
+      "type": "java.lang.String",
+      "description": "Description for service.genius.url."
+    },
+    {
+      "name": "utils.thread.max",
+      "type": "java.lang.Integer",
+      "description": "Description for utils.thread.max."
+    },
+    {
+      "name": "utils.task.max",
+      "type": "java.lang.Integer",
+      "description": "Description for utils.task.max."
+    },
+    {
+      "name": "region.aws.default",
+      "type": "java.lang.String",
+      "description": "Description for region.aws.default."
+    },
+    {
+      "name": "python.root",
+      "type": "java.lang.String",
+      "description": "Description for python.root."
+    },
+    {
+      "name": "client.musixmatch.token",
+      "type": "java.lang.String",
+      "description": "Description for client.musixmatch.token."
+    },
+    {
+      "name": "client.genius.token",
+      "type": "java.lang.String",
+      "description": "Description for client.genius.token."
+    },
+    {
+      "name": "client.html.timeout.connect",
+      "type": "java.lang.Integer",
+      "description": "Description for client.html.timeout.connect."
+    },
+    {
+      "name": "client.html.timeout.request",
+      "type": "java.lang.Integer",
+      "description": "Description for client.html.timeout.request."
+    },
+    {
+      "name": "client.html.timeout.socket",
+      "type": "java.lang.Integer",
+      "description": "Description for client.html.timeout.socket."
+    },
+    {
+      "name": "client.html.connections.max",
+      "type": "java.lang.Integer",
+      "description": "Description for client.html.connections.max."
+    },
+    {
+      "name": "client.html.connections.ttl",
+      "type": "java.lang.Integer",
+      "description": "Description for client.html.connections.ttl."
+    },
+    {
+      "name": "client.html.connections.idle",
+      "type": "java.lang.Integer",
+      "description": "Description for client.html.connections.idle."
+    },
+    {
+      "name": "client.genius.api.endpoint",
+      "type": "java.lang.String",
+      "description": "Description for client.genius.api.endpoint."
+    },
+    {
+      "name": "client.genius.api.search",
+      "type": "java.lang.String",
+      "description": "Description for client.genius.api.search."
+    },
+    {
+      "name": "client.genius.api.url",
+      "type": "java.lang.String",
+      "description": "Description for client.genius.api.url."
+    },
+    {
+      "name": "client.html.user.agent",
+      "type": "java.lang.String",
+      "description": "Description for client.html.user.agent."
+    },
+    {
+      "name": "client.spotify.refresh.rate",
+      "type": "java.lang.Integer",
+      "description": "Description for client.spotify.refresh.rate."
+    },
+    {
+      "name": "client.ibm.url",
+      "type": "java.lang.String",
+      "description": "Description for client.ibm.url."
+    },
+    {
+      "name": "client.spotify.thread.limit",
+      "type": "java.lang.Integer",
+      "description": "Description for client.spotify.thread.limit."
+    },
+    {
+      "name": "client.spotify.timeout",
+      "type": "java.lang.Integer",
+      "description": "Description for client.spotify.timeout."
+    },
+    {
+      "name": "client.twitter.accesskey",
+      "type": "java.lang.String",
+      "description": "Description for client.twitter.accesskey."
+    },
+    {
+      "name": "client.twitter.secretkey",
+      "type": "java.lang.String",
+      "description": "Description for client.twitter.secretkey."
+    },
+    {
+      "name": "client.twitter.bearer.token",
+      "type": "java.lang.String",
+      "description": "Description for client.twitter.bearer.token."
+    },
+    {
+      "name": "client.twitter.accesstoken",
+      "type": "java.lang.String",
+      "description": "Description for client.twitter.accesstoken."
+    },
+    {
+      "name": "client.twitter.accesssecret",
+      "type": "java.lang.String",
+      "description": "Description for client.twitter.accesssecret."
+    },
+    {
+      "name": "client.twitter.results.max",
+      "type": "java.lang.Integer",
+      "description": "Description for client.twitter.results.max."
+    },
+    {
+      "name": "client.ibm.discovery.key",
+      "type": "java.lang.String",
+      "description": "Description for client.ibm.discovery.key."
+    },
+    {
+      "name": "client.ibm.discovery.url",
+      "type": "java.lang.String",
+      "description": "Description for client.ibm.discovery.url."
+    },
+    {
+      "name": "client.ibm.tone.key",
+      "type": "java.lang.String",
+      "description": "Description for client.ibm.tone.key."
+    },
+    {
+      "name": "client.ibm.tone.url",
+      "type": "java.lang.String",
+      "description": "Description for client.ibm.tone.url."
+    },
+    {
+      "name": "client.ibm.tone.date",
+      "type": "java.lang.String",
+      "description": "Description for client.ibm.tone.date."
+    },
+    {
+      "name": "client.ibm.discovery.date",
+      "type": "java.lang.String",
+      "description": "Description for client.ibm.discovery.date."
+    },
+    {
+      "name": "client.ibm.discovery.envid",
+      "type": "java.lang.String",
+      "description": "Description for client.ibm.discovery.envid."
+    },
+    {
+      "name": "client.ibm.discovery.colid",
+      "type": "java.lang.String",
+      "description": "Description for client.ibm.discovery.colid."
+    },
+    {
+      "name": "client.spotify.song.max",
+      "type": "java.lang.Integer",
+      "description": "Description for client.spotify.song.max."
+    },
+    {
+      "name": "client.spotify.artist.max",
+      "type": "java.lang.Integer",
+      "description": "Description for client.spotify.artist.max."
+    },
+    {
+      "name": "client.dynamodb.attrmax",
+      "type": "java.lang.Integer",
+      "description": "Description for client.dynamodb.attrmax."
+    },
+    {
+      "name": "client.ibm.tone.max",
+      "type": "java.lang.Integer",
+      "description": "Description for client.ibm.tone.max."
+    }
+  ] }

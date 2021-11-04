@@ -5,8 +5,8 @@ import com.ibm.watson.discovery.v1.Discovery;
 import com.ibm.watson.discovery.v1.model.QueryOptions;
 import com.ibm.watson.discovery.v1.model.QueryResponse;
 import com.ibm.watson.discovery.v1.model.QueryOptions;
-import com.ibm.watson.discovery.v1.model.QueryResult;
 
+import com.ibm.watson.discovery.v1.model.QueryResult;
 import com.saamba.api.config.ClientConfig;
 import com.saamba.api.enums.ClientTypes;
 
@@ -71,20 +71,31 @@ public class DiscoveryClient implements ClientConfig {
      *
      * @return          - uri reference to spotify song
      */
-    public List<String[]> findSongs(String tone, String concept) {
-        log.info("Starting query over Discovery collection for " + tone + ", " + concept + " .");
-        QueryOptions.Builder queryBuilder = new QueryOptions.Builder(envId, collectionId);
-        queryBuilder.query("artist:\""+concept+"\"|lyrics:\""+concept+"\"|tone::\""+tone+"\"");
-        //queryBuilder.query("tone::\""+tone+"\",(artist:\""+concept+"\"|lyrics:\""+concept+"\")");
-        QueryResponse queryResponse = discoveryClient.query(queryBuilder.build()).execute().getResult();
-        
+<<<<<<< HEAD
+    public List<String[]> findSongs(String seed) {
+        log.info("Starting query over Discovery collection for " + seed + " .");
+        QueryResponse query = discoveryClient.query(
+                        (new QueryOptions.Builder(envId, collectionId))
+                                .naturalLanguageQuery(seed)
+                                .build())
+                .execute()
+                .getResult();
         // Parses QueryResponse and puts Artist + Title in an ArrayList of Arrays [Artist, Title]
         List<String[]> songs = new ArrayList<>();
-        List<QueryResult> results = queryResponse.getResults();
+        List<QueryResult> results = query.getResults();
 
         for (QueryResult result : results) {
             songs.add(new String[]{result.get("artist").toString(), result.get("title").toString()});
         }
         return songs;
+=======
+    public String findSongs(String tone, String concept) {
+        log.info("Starting query over Discovery collection for " + tone + ", " + concept + " .");
+        QueryOptions.Builder queryBuilder = new QueryOptions.Builder(envId, collectionId);
+        queryBuilder.query("artist:\""+concept+"\"|lyrics:\""+concept+"\"|tone::\""+tone+"\"");
+        //queryBuilder.query("tone::\""+tone+"\",(artist:\""+concept+"\"|lyrics:\""+concept+"\")");
+        QueryResponse queryResponse = discoveryClient.query(queryBuilder.build()).execute().getResult();
+        return queryResponse.toString();
+>>>>>>> origin/evenMoreData
     }
 }

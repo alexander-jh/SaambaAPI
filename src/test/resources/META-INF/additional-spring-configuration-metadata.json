@@ -1,0 +1,33 @@
+{
+  "properties": [
+    {
+      "name": "test.spotify.genre",
+      "type": "java.lang.String",
+      "description": "Description for test.Spotify.genre."
+    },
+    {
+      "name": "test.genius.path",
+      "type": "java.lang.String",
+      "description": "Description for test.genius.path."
+    },
+    {
+      "name": "test.genius.title",
+      "type": "java.lang.String",
+      "description": "Description for test.genius.title."
+    },
+    {
+      "name": "test.genius.artist",
+      "type": "java.lang.String",
+      "description": "Description for test.genius.artist."
+    },
+    {
+      "name": "test.utils.thread.max",
+      "type": "java.lang.Integer",
+      "description": "Description for test.utils.thread.max."
+    },
+    {
+      "name": "test.utils.task.max",
+      "type": "java.lang.Integer",
+      "description": "Description for test.utils.task.max."
+    }
+  ] }
