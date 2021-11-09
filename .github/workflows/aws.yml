@@ -62,7 +62,7 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    environment: production
+    environment: saamba-env
 
     steps:
       - name: Checkout
