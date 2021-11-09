@@ -80,45 +80,26 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
 
       - name: Build, tag, and push image to Amazon ECR
-        uses: docker/build-push-action@v2
-        with:
-          secrets: |
-            "SPOTIFY_ACCESS_KEY=${{ secrets.SPOTIFY_ACCESS_KEY }}"
-            "SPOTIFY_SECRET_KEY=${{ secrets.SPOTIFY_SECRET_KEY }}"
-            "IBM_DISCOVERY_KEY=${{ secrets.IBM_DISCOVERY_KEY }}"
-            "IBM_DISCOVERY_URL=${{ secrets.IBM_DISCOVERY_URL }}"
-            "IBM_DISCOVERY_ENVID=${{ secrets.IBM_DISCOVERY_ENVID }}"
-            "IBM_DISCOVERY_COLID=${{ secrets.IBM_DISCOVERY_COLID }}"
-            "IBM_TONE_KEY=${{ secrets.IBM_TONE_KEY }}"
-            "IBM_TONE_URL=${{ secrets.IBM_TONE_URL }}"
-            "AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}"
-            "AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }}"
-            "GENIUS_TOKEN=${{ secrets.GENIUS_TOKEN }}"
-            "TWITTER_ACCESS_KEY=${{ secrets.TWITTER_ACCESS_KEY }}"
-            "TWITTER_SECRET_KEY=${{ secrets.TWITTER_SECRET_KEY }}"
-            "TWITTER_BEARER_TOKEN=${{ secrets.TWITTER_BEARER_TOKEN }}"
-            "TWITTER_ACCESS_TOKEN=${{ secrets.TWITTER_ACCESS_TOKEN }}"
-            "TWITTER_ACCESS_SECRET=${{ secrets.TWITTER_ACCESS_SECRET }}"
         id: build-image
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ github.sha }}
-          SPOTIFY_ACCESS_KEY: ${{ secrets.SPOTIFY_ACCESS_KEY }}
-          SPOTIFY_SECRET_KEY: ${{ secrets.SPOTIFY_SECRET_KEY }}
-          IBM_DISCOVERY_KEY: ${{ secrets.IBM_DISCOVERY_KEY }}
-          IBM_DISCOVERY_URL: ${{ secrets.IBM_DISCOVERY_URL }}
-          IBM_DISCOVERY_ENVID: ${{ secrets.IBM_DISCOVERY_ENVID }}
-          IBM_DISCOVERY_COLID: ${{ secrets.IBM_DISCOVERY_COLID }}
-          IBM_TONE_KEY: ${{ secrets.IBM_TONE_KEY }}
-          IBM_TONE_URL: ${{ secrets.IBM_TONE_URL }}
-          AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
-          AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
-          GENIUS_TOKEN: ${{ secrets.GENIUS_TOKEN }}
-          TWITTER_ACCESS_KEY: ${{ secrets.TWITTER_ACCESS_KEY }}
-          TWITTER_SECRET_KEY: ${{ secrets.TWITTER_SECRET_KEY }}
-          TWITTER_BEARER_TOKEN: ${{ secrets.TWITTER_BEARER_TOKEN }}
-          TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
-          TWITTER_ACCESS_SECRET: ${{ secrets.TWITTER_ACCESS_SECRET }}
+          ECR_REGISTRY: echo ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: echo ${{ github.sha }}
+          SPOTIFY_ACCESS_KEY: echo ${{ secrets.SPOTIFY_ACCESS_KEY }}
+          SPOTIFY_SECRET_KEY: echo ${{ secrets.SPOTIFY_SECRET_KEY }}
+          IBM_DISCOVERY_KEY: echo ${{ secrets.IBM_DISCOVERY_KEY }}
+          IBM_DISCOVERY_URL: echo ${{ secrets.IBM_DISCOVERY_URL }}
+          IBM_DISCOVERY_ENVID: echo ${{ secrets.IBM_DISCOVERY_ENVID }}
+          IBM_DISCOVERY_COLID: echo ${{ secrets.IBM_DISCOVERY_COLID }}
+          IBM_TONE_KEY: echo ${{ secrets.IBM_TONE_KEY }}
+          IBM_TONE_URL: echo ${{ secrets.IBM_TONE_URL }}
+          AWS_ACCESS_KEY: echo ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_KEY: echo ${{ secrets.AWS_SECRET_KEY }}
+          GENIUS_TOKEN: echo ${{ secrets.GENIUS_TOKEN }}
+          TWITTER_ACCESS_KEY: echo ${{ secrets.TWITTER_ACCESS_KEY }}
+          TWITTER_SECRET_KEY: echo ${{ secrets.TWITTER_SECRET_KEY }}
+          TWITTER_BEARER_TOKEN: echo ${{ secrets.TWITTER_BEARER_TOKEN }}
+          TWITTER_ACCESS_TOKEN: echo ${{ secrets.TWITTER_ACCESS_TOKEN }}
+          TWITTER_ACCESS_SECRET: echo ${{ secrets.TWITTER_ACCESS_SECRET }}
         run: |
           # Build a docker container and
           # push it to ECR so that it can
