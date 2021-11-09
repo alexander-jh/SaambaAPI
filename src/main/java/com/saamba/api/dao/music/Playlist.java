@@ -10,12 +10,14 @@ public class Playlist {
 
     private String[] trackUris;
     private List<String> concepts;
-    private Map<String, Double> tones;
+    private List<String> tones;
+    private List<String> followers;
 
-    public Playlist(String[] trackUris, List<String> concepts, Map<String, Double> tones) {
+    public Playlist(String[] trackUris, List<String> concepts, List<String> tones, List<String> followers) {
         this.trackUris = trackUris;
         this.concepts = concepts;
         this.tones = tones;
+        this.followers = followers;
     }
 
     public String toJSON() throws JsonProcessingException {

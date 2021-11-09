@@ -71,13 +71,45 @@ public class DiscoveryClient implements ClientConfig {
      *
      * @return          - uri reference to spotify song
      */
-    public List<String[]> findSongs(String tone, String concept) {
-        log.info("Starting query over Discovery collection for " + tone + ", " + concept + " .");
+    public List<String[]> findSongs(List<String> tones, List<String> concepts, List<String> followers) {
+        log.info("Starting query over Discovery collection for " + tones.toString() + ", " + concepts.toString() + " ." + followers.toString());
         QueryOptions.Builder queryBuilder = new QueryOptions.Builder(envId, collectionId);
-        queryBuilder.query("artist:\""+concept+"\"|lyrics:\""+concept+"\"|tone::\""+tone+"\"");
-        //queryBuilder.query("tone::\""+tone+"\",(artist:\""+concept+"\"|lyrics:\""+concept+"\")");
+        StringBuilder str = new StringBuilder();
+        for (String follower : followers) {
+            str.append("artist:\"");
+            str.append(follower);
+            str.append("\"^2|");
+        }
+        str.append("title:\"");
+        str.append(concepts.get(0));
+        str.append("\"^2|");
+        str.append("title:\"");
+        str.append(concepts.get(1));
+        str.append("\"^1.5|");
+        str.append("title:\"");
+        str.append(concepts.get(2));
+        str.append("\"^1|");
+        str.append("lyrics:\"");
+        str.append(concepts.get(0));
+        str.append("\"^2|");
+        str.append("lyrics:\"");
+        str.append(concepts.get(1));
+        str.append("\"^1.5|");
+        str.append("lyrics:\"");
+        str.append(concepts.get(2));
+        str.append("\"^1|");
+        str.append("tone::\"");
+        str.append(tones.get(0));
+        str.append("\"^2|");
+        str.append("tone::\"");
+        str.append(tones.get(1));
+        str.append("\"^1.5|");
+        str.append("tone::\"");
+        str.append(tones.get(2));
+        str.append("\"^1");
+        queryBuilder.query(str.toString());
         QueryResponse queryResponse = discoveryClient.query(queryBuilder.build()).execute().getResult();
-        
+
         // Parses QueryResponse and puts Artist + Title in an ArrayList of Arrays [Artist, Title]
         List<String[]> songs = new ArrayList<>();
         List<QueryResult> results = queryResponse.getResults();

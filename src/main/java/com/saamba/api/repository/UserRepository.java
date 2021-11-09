@@ -47,23 +47,16 @@ public class UserRepository {
      */
     public Playlist getPlaylist(String accountName) {
         List<String> concepts = twitterConfig.getConcepts(twitterConfig.tweetTexts(accountName));
-        Map<String, Double> tones = toneClient.getMaxTone(twitterConfig.tweetTexts(accountName));
-
-        //get top tone
-        String tone = "";
-        Double max = 0.0;
-        for(Map.Entry<String, Double> pair : tones.entrySet()) {
-            if(pair.getValue() > max) {
-                tone = pair.getKey();
-                max = pair.getValue();
-            }
-        }
+        List<String> tones =  toneClient.getMaxTones(twitterConfig.tweetTexts(accountName));
+        List<String> followers = twitterConfig.getFollowingList(accountName);
 
         //query using just top tone and one concept
-        List<String[]> songsAndArtists =  discoveryClient.findSongs(tone, concepts.get(0));
+        List<String[]> songsAndArtists =  discoveryClient.findSongs(tones, concepts, followers);
         String[] trackUris = searchSongs(songsAndArtists);
-        return new Playlist(trackUris, concepts, tones);
-    }
+        return new Playlist(trackUris, concepts, tones, followers);
+
+        }
+
 
     /**
      * Add a new user to the user table.

@@ -6,6 +6,8 @@ import com.saamba.api.entity.user.Tweet;
 import io.github.redouane59.twitter.TwitterClient;
 import io.github.redouane59.twitter.dto.endpoints.AdditionalParameters;
 import io.github.redouane59.twitter.dto.tweet.TweetV2;
+import io.github.redouane59.twitter.dto.user.UserList;
+import io.github.redouane59.twitter.dto.user.UserV2;
 import io.github.redouane59.twitter.signature.TwitterCredentials;
 
 import lombok.extern.slf4j.Slf4j;
@@ -163,13 +165,14 @@ public class TwitterConfig implements ClientConfig {
      * @return              - a list of the accounts they are following
      */
    public List<String> getFollowingList(String accountName){
-        List<String> uL = twitterClient.getFollowersIds(twitterClient.getUserFromUserName(accountName).getId());
+        UserList uL = twitterClient.getFollowers(twitterClient.getUserFromUserName(accountName).getId());
         List<String> uL2 = new ArrayList<>();
-        for (String s: uL
-             ) {
-            if(artistMap.containsKey(twitterClient.getUserFromUserId(s).getName())) {
-                uL2.add(twitterClient.getUserFromUserId(s).getName());
+        List<UserV2.UserData> l2 = uL.getData();
+        for(int i=0; i<l2.size(); i++){
+            if(artistMap.containsKey(l2.get(i).getName())) {
+                uL2.add(l2.get(i).getName());
             }
+
         }
         return uL2;
     }
