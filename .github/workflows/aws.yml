@@ -80,10 +80,6 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
 
       - name: Build, tag, and push image to Amazon ECR
-        id: build-image
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ github.sha }}
         with:
           SPOTIFY_ACCESS_KEY: ${{ env.SPOTIFY_ACCESS_KEY }}
           SPOTIFY_SECRET_KEY: ${{ env.SPOTIFY_SECRET_KEY }}
@@ -101,6 +97,10 @@ jobs:
           TWITTER_BEARER_TOKEN: ${{ env.TWITTER_BEARER_TOKEN }}
           TWITTER_ACCESS_TOKEN: ${{ env.TWITTER_ACCESS_TOKEN }}
           TWITTER_ACCESS_SECRET: ${{ env.TWITTER_ACCESS_SECRET }}
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
         run: |
           # Build a docker container and
           # push it to ECR so that it can
