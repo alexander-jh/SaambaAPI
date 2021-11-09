@@ -88,24 +88,7 @@ jobs:
           # Build a docker container and
           # push it to ECR so that it can
           # be deployed to ECS.
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
-            --build-arg SPOTIFY_ACCESS_KEY=${{ env.SPOTIFY_ACCESS_KEY }} \
-            --build-arg SPOTIFY_SECRET_KEY=${{ env.SPOTIFY_SECRET_KEY }} \
-            --build-arg IBM_DISCOVERY_KEY=${{ env.IBM_DISCOVERY_KEY }} \
-            --build-arg IBM_DISCOVERY_URL=${{ env.IBM_DISCOVERY_URL }} \
-            --build-arg IBM_DISCOVERY_ENVID=${{ env.IBM_DISCOVERY_ENVID }} \
-            --build-arg IBM_DISCOVERY_COLID=${{ env.IBM_DISCOVERY_COLID }} \
-            --build-arg IBM_TONE_KEY=${{ env.IBM_TONE_KEY }} \
-            --build-arg IBM_TONE_URL=${{ env.IBM_TONE_URL }} \
-            --build-arg AWS_ACCESS_KEY=${{ env.AWS_ACCESS_KEY }} \
-            --build-arg AWS_SECRET_KEY=${{ env.AWS_SECRET_KEY }} \
-            --build-arg GENIUS_TOKEN=${{ env.GENIUS_TOKEN }} \
-            --build-arg TWITTER_ACCESS_KEY=${{ env.TWITTER_ACCESS_KEY }} \
-            --build-arg TWITTER_SECRET_KEY=${{ env.TWITTER_SECRET_KEY }} \
-            --build-arg TWITTER_BEARER_TOKEN=${{ env.TWITTER_BEARER_TOKEN }} \
-            --build-arg TWITTER_ACCESS_TOKEN=${{ env.TWITTER_ACCESS_TOKEN }} \
-            --build-arg TWITTER_ACCESS_SECRET=${{ env.TWITTER_ACCESS_SECRET }} \
-            .
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
