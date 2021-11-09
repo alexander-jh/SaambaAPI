@@ -1,6 +1,6 @@
 FROM amazoncorretto:11
 
-RUN echo "${env.TWITTER_ACCESS_KEY}"
+RUN echo "${TWITTER_ACCESS_KEY}"
 
 RUN yum -y update && yum install -y maven
 
