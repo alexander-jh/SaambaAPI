@@ -32,6 +32,7 @@ on:
       - main
 
 env:
+  environment: saamba-env
   AWS_REGION: us-east-1                   # set this to your preferred AWS region, e.g. us-west-1
   ECR_REPOSITORY: saamba           # set this to your Amazon ECR repository name
   ECS_SERVICE: saambav2-service                 # set this to your Amazon ECS service name
@@ -40,22 +41,22 @@ env:
   # file, e.g. .aws/task-definition.json
   CONTAINER_NAME: saamba           # set this to the name of the container in the
   # containerDefinitions section of your task definition
-  SPOTIFY_ACCESS_KEY: ${{ secrets.saamba-env.SPOTIFY_ACCESS_KEY }}
-  SPOTIFY_SECRET_KEY: ${{ secrets.saamba-env.SPOTIFY_SECRET_KEY }}
-  IBM_DISCOVERY_KEY: ${{ secrets.saamba-env.IBM_DISCOVERY_KEY }}
-  IBM_DISCOVERY_URL: ${{ secrets.saamba-env.IBM_DISCOVERY_URL }}
-  IBM_DISCOVERY_ENVID: ${{ secrets.saamba-env.IBM_DISCOVERY_ENVID }}
-  IBM_DISCOVERY_COLID: ${{ secrets.saamba-env.IBM_DISCOVERY_COLID }}
-  IBM_TONE_KEY: ${{ secrets.saamba-env.IBM_TONE_KEY }}
-  IBM_TONE_URL: ${{ secrets.saamba-env.IBM_TONE_URL }}
-  AWS_ACCESS_KEY: ${{ secrets.saamba-env.AWS_ACCESS_KEY }}
-  AWS_SECRET_KEY: ${{ secrets.saamba-env.AWS_SECRET_KEY }}
-  GENIUS_TOKEN: ${{ secrets.saamba-env.GENIUS_TOKEN }}
-  TWITTER_ACCESS_KEY: ${{ secrets.saamba-env.TWITTER_ACCESS_KEY }}
-  TWITTER_SECRET_KEY: ${{ secrets.saamba-env.TWITTER_SECRET_KEY }}
-  TWITTER_BEARER_TOKEN: ${{ secrets.saamba-env.TWITTER_BEARER_TOKEN }}
-  TWITTER_ACCESS_TOKEN: ${{ secrets.saamba-env.TWITTER_ACCESS_TOKEN }}
-  TWITTER_ACCESS_SECRET: ${{ secrets.saamba-env.TWITTER_ACCESS_SECRET }}
+  SPOTIFY_ACCESS_KEY: ${{ secrets.SPOTIFY_ACCESS_KEY }}
+  SPOTIFY_SECRET_KEY: ${{ secrets.SPOTIFY_SECRET_KEY }}
+  IBM_DISCOVERY_KEY: ${{ secrets.IBM_DISCOVERY_KEY }}
+  IBM_DISCOVERY_URL: ${{ secrets.IBM_DISCOVERY_URL }}
+  IBM_DISCOVERY_ENVID: ${{ secrets.IBM_DISCOVERY_ENVID }}
+  IBM_DISCOVERY_COLID: ${{ secrets.IBM_DISCOVERY_COLID }}
+  IBM_TONE_KEY: ${{ secrets.IBM_TONE_KEY }}
+  IBM_TONE_URL: ${{ secrets.IBM_TONE_URL }}
+  AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+  AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+  GENIUS_TOKEN: ${{ secrets.GENIUS_TOKEN }}
+  TWITTER_ACCESS_KEY: ${{ secrets.TWITTER_ACCESS_KEY }}
+  TWITTER_SECRET_KEY: ${{ secrets.TWITTER_SECRET_KEY }}
+  TWITTER_BEARER_TOKEN: ${{ secrets.TWITTER_BEARER_TOKEN }}
+  TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
+  TWITTER_ACCESS_SECRET: ${{ secrets.TWITTER_ACCESS_SECRET }}
 
 jobs:
   deploy:
