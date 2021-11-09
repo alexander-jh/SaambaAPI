@@ -1,8 +1,8 @@
 FROM amazoncorretto:11
 
-RUN yum -y update && yum install -y maven
+RUN echo "${env.TWITTER_ACCESS_KEY}"
 
-RUN echo ${SPOTIFY_ACCESS_KEY}
+RUN yum -y update && yum install -y maven
 
 COPY . /saamba
 RUN cd /saamba && mvn package
