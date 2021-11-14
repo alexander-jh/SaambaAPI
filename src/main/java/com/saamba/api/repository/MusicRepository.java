@@ -193,7 +193,7 @@ public class MusicRepository {
         ObjectMapper mapper = new ObjectMapper();
         String fileName = "json/" + g.getGenre() + ".json";
         try {
-            g.setTones(tone.getTones(g));
+            //g.setTones(tone.getMaxTones());
             mapper.writeValue(Paths.get(fileName).toFile(), g);
         } catch(IOException e) {
             log.error("Genre " + g.getGenre() + " has failed to parse into json.", e);

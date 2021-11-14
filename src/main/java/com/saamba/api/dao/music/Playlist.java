@@ -3,6 +3,7 @@ package com.saamba.api.dao.music;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +16,10 @@ public class Playlist {
 
     public Playlist(String[] trackUris, List<String> concepts, List<String> tones, List<String> followers) {
         this.trackUris = trackUris;
-        this.concepts = concepts;
+        this.concepts = new ArrayList<>();
+        this.concepts.add(concepts.get(0));
+        this.concepts.add(concepts.get(1));
+        this.concepts.add(concepts.get(2));
         this.tones = tones;
         this.followers = followers;
     }

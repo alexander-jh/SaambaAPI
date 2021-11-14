@@ -67,12 +67,12 @@ public class DiscoveryClient implements ClientConfig {
     /**
      * Searches for song in discovery client based upon the seed query
      * string.
-     * @param tone      - string for query
+     * @param tones      - string for query
      *
      * @return          - uri reference to spotify song
      */
     public List<String[]> findSongs(List<String> tones, List<String> concepts, List<String> followers) {
-        log.info("Starting query over Discovery collection for " + tones.toString() + ", " + concepts.toString() + " ." + followers.toString());
+        log.info("Starting query over Discovery collection for " + tones.toString() + ", " + concepts.toString() + ", " + followers.toString());
         QueryOptions.Builder queryBuilder = new QueryOptions.Builder(envId, collectionId);
         StringBuilder str = new StringBuilder();
         for (String follower : followers) {
