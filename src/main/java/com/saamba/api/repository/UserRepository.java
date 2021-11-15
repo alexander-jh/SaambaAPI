@@ -4,16 +4,20 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBSaveExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ExpectedAttributeValue;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saamba.api.config.TwitterConfig;
 import com.saamba.api.config.clients.DiscoveryClient;
 import com.saamba.api.config.clients.SpotifyClient;
 import com.saamba.api.config.clients.ToneClient;
 import com.saamba.api.dao.music.Playlist;
 import com.saamba.api.entity.user.User;
+import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +26,7 @@ import java.util.Map;
  * Service level logic to handle reporting back to main controller
  * and construct majority of API calls from front-end.
  */
+@Slf4j
 @Repository("user")
 public class UserRepository {
 
@@ -45,18 +50,33 @@ public class UserRepository {
      * @param accountName   - string twitter handle passed in url
      * @return              - formatted JSON string of playlist
      */
-    public Playlist getPlaylist(String accountName) {
-        List<String> concepts = twitterConfig.getConcepts(twitterConfig.tweetTexts(accountName));
-        List<String> tones =  toneClient.getMaxTones(twitterConfig.tweetTexts(accountName));
-        List<String> followers = twitterConfig.getFollowingList(accountName);
+    public String getPlaylist(String accountName) {
+        try {
+            List<String> concepts = twitterConfig.getConcepts(twitterConfig.tweetTexts(accountName));
+            List<String> tones = toneClient.getMaxTones(twitterConfig.tweetTexts(accountName));
+            List<String> followers = twitterConfig.getFollowingList(accountName);
 
-        //query using just top tone and one concept
-        List<String[]> songsAndArtists =  discoveryClient.findSongs(tones, concepts, followers);
-        String[] trackUris = searchSongs(songsAndArtists);
-        return new Playlist(trackUris, concepts, tones, followers);
-
+            //query using just top tone and one concept
+            List<String[]> songsAndArtists = discoveryClient.findSongs(tones, concepts, followers);
+            String[] trackUris = searchSongs(songsAndArtists);
+            return playlistToJSON(new Playlist(trackUris, concepts, tones, followers));
+        } catch(Exception e) {
+            log.error("Something bad happened.");
+            return "";
         }
+    }
 
+    private String playlistToJSON(Playlist p) {
+        String s = "";
+        if(p == null || p.getTrackUris().length == 0) return s;
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            s = mapper.writeValueAsString(p);
+        } catch(IOException e) {
+            log.error("Playlist has failed to parse into json.", e);
+        }
+        return s;
+    }
 
     /**
      * Add a new user to the user table.

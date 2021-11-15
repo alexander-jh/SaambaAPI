@@ -6,6 +6,7 @@ import com.saamba.api.config.clients.SpotifyClient;
 
 import com.saamba.api.config.clients.ToneClient;
 import com.saamba.api.dao.music.Genre;
+import com.saamba.api.dao.music.Playlist;
 import com.saamba.api.dao.music.Song;
 import com.saamba.api.entity.music.MusicService;
 import com.saamba.api.enums.GenreConstants;

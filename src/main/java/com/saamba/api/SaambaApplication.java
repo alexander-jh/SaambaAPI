@@ -71,7 +71,7 @@ public class SaambaApplication {
     @GetMapping("/getPlaylist/{accountName}")
     public String getPlaylist(@PathVariable String accountName) throws JsonProcessingException {
         log.info("Starting API call /getPlaylist/" + accountName);
-        return entityRepo.getPlaylist(accountName).toJSON();
+        return entityRepo.getPlaylist(accountName);
     }
 
     @PostMapping("/saveUser")
