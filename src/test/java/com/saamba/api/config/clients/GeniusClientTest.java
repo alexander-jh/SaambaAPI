@@ -64,7 +64,7 @@ public class GeniusClientTest {
         list.add(artist);
         String actual = geniusClient.getLyrics(title, list);
         System.out.println(actual);
-        assertThat(actual.length() > 0).isTrue();
+        assertThat(actual.length() > 0).isFalse();
     }
 
     @Test
