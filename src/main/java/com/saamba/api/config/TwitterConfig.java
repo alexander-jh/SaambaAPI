@@ -99,7 +99,6 @@ public class TwitterConfig implements ClientConfig {
     private List<Tweet> getTweets(String accountName) {
         Tweet t;
         List<Tweet> tweets = new ArrayList<>();
-        try {
             for (TweetV2.TweetData td : twitterClient.getUserTimeline(
                     twitterClient.getUserFromUserName(accountName).getId(),
                     AdditionalParameters.builder()
@@ -112,9 +111,7 @@ public class TwitterConfig implements ClientConfig {
                 t.setMessage(td.getText());
                 tweets.add(t);
             }
-        } catch (Exception e) {
-            //TODO: figure out graceful resolution to frontend
-        }
+
         return tweets;
     }
 
@@ -173,7 +170,7 @@ public class TwitterConfig implements ClientConfig {
         List<UserV2.UserData> l2 = uL.getData();
         for(int i=0; i<l2.size(); i++){
             if(artistMap.containsKey(l2.get(i).getName())) {
-                uL2.add(l2.get(i).getName());
+                uL2.add(artistMap.get(l2.get(i).getName()));
             }
 
         }
@@ -192,8 +189,10 @@ public class TwitterConfig implements ClientConfig {
        words.removeAll(stopwords);
        Map<String, Integer> hm = new HashMap<String, Integer>();
        for (String i : words) {
-           Integer j = hm.get(i);
-           hm.put(i, (j == null) ? 1 : j + 1);
+           if(i.charAt(0) != '@' && (i.length()>4 && !i.substring(0,4).equals("http"))) {
+               Integer j = hm.get(i);
+               hm.put(i, (j == null) ? 1 : j + 1);
+           }
        }
        List<Map.Entry<String, Integer>> frequencyList = new ArrayList<Map.Entry<String, Integer>>(hm.entrySet());
        frequencyList.sort(Comparator.comparing(Map.Entry<String, Integer>::getValue).reversed());
