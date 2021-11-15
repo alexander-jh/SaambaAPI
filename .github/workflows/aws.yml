@@ -33,14 +33,14 @@ on:
 
 env:
   environment: saamba-env
-  AWS_REGION: us-east-1                   # set this to your preferred AWS region, e.g. us-west-1
-  ECR_REPOSITORY: saamba           # set this to your Amazon ECR repository name
-  ECS_SERVICE: saambav2-service                 # set this to your Amazon ECS service name
-  ECS_CLUSTER: saambav2                 # set this to your Amazon ECS cluster name
-  ECS_TASK_DEFINITION: saambaapi # set this to the path to your Amazon ECS task definition
-  # file, e.g. .aws/task-definition.json
-  CONTAINER_NAME: saamba           # set this to the name of the container in the
-  # containerDefinitions section of your task definition
+  AWS_REGION: us-east-1                           # set this to your preferred AWS region, e.g. us-west-1
+  ECR_REPOSITORY: saamba                          # set this to your Amazon ECR repository name
+  ECS_SERVICE: saambav2-service                   # set this to your Amazon ECS service name
+  ECS_CLUSTER: saambav2                           # set this to your Amazon ECS cluster name
+  ECS_TASK_DEFINITION: /aws/saamba-task-def.json  # set this to the path to your Amazon ECS task definition
+                                                  # file, e.g. .aws/task-definition.json
+  CONTAINER_NAME: saamba                          # set this to the name of the container in the
+                                                  # containerDefinitions section of your task definition
   SPOTIFY_ACCESS_KEY: ${{ secrets.SPOTIFY_ACCESS_KEY }}
   SPOTIFY_SECRET_KEY: ${{ secrets.SPOTIFY_SECRET_KEY }}
   IBM_DISCOVERY_KEY: ${{ secrets.IBM_DISCOVERY_KEY }}
@@ -124,6 +124,7 @@ jobs:
           .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
