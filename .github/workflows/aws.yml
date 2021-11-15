@@ -105,7 +105,7 @@ jobs:
           # push it to ECR so that it can
           # be deployed to ECS.
           `docker build \
-          #-t $ECR_REGISTRY/$ECR_REPOSITORY=$IMAGE_TAG \
+          -t $ECR_REGISTRY/$ECR_REPOSITORY=$IMAGE_TAG \
           --build-arg SPOTIFY_ACCESS_KEY='${SPOTIFY_ACCESS_KEY}' \
           --build-arg SPOTIFY_SECRET_KEY='${SPOTIFY_SECRET_KEY}' \
           --build-arg IBM_DISCOVERY_KEY='${IBM_DISCOVERY_KEY}' \
@@ -122,7 +122,7 @@ jobs:
           --build-arg TWITTER_BEARER_TOKEN='${TWITTER_BEARER_TOKEN}' \
           --build-arg TWITTER_ACCESS_TOKEN='${TWITTER_ACCESS_TOKEN}' \
           --build-arg TWITTER_ACCESS_SECRET='${TWITTER_ACCESS_SECRET}' \
-          --no-cache .`
+          .`
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
