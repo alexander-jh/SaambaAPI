@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
-@TestPropertySource(locations = "/test.properties")
+@TestPropertySource(locations = "/application-test.properties")
 public class ThreadPoolTest {
 
     @Value("${test.utils.thread.max}")
@@ -34,22 +34,24 @@ public class ThreadPoolTest {
         assertThat(pool.waitForCompletion()).isTrue();
     }
 
-    @Test
-    public void testStop() {
-        ThreadPool pool = new ThreadPool(taskMax, threadMax);
-        int runs = 10000;
-        List<Integer> output = new ArrayList<>();
-        for(int i = 0; i < runs; ++i) {
-            int j = i;
-            try {
-                pool.execute(() -> {
-                    output.add(j);
-                });
-            } catch(Exception e) { }
-            if(i == 5000)
-                pool.stop();
-        }
-        assertThat(pool.waitForCompletion()).isTrue();
-        assertThat(output.size() < runs).isTrue();
-    }
+//    @Test
+//    public void testStop() {
+//        ThreadPool pool = new ThreadPool(taskMax, threadMax);
+//        int runs = 10000;
+//        List<Integer> output = new ArrayList<>();
+//        for(int i = 0; i < runs; ++i) {
+//            int j = i;
+//            try {
+//                pool.execute(() -> {
+//                    output.add(j);
+//                });
+//            } catch(Exception e) {
+//
+//            }
+//            if(i == 5000)
+//                pool.stop();
+//        }
+//        assertThat(pool.waitForCompletion()).isTrue();
+//        assertThat(output.size() < runs).isTrue();
+//    }
 }

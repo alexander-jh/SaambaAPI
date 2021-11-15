@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
-@TestPropertySource(locations = "/test.properties")
+@TestPropertySource(locations = "/application-test.properties")
 public class GeniusClientTest {
 
     @Value("${test.genius.title}")
@@ -56,15 +56,6 @@ public class GeniusClientTest {
     public void parseLyricsTestEmpty() {
         String actual = geniusClient.parseLyrics(path + "33333333");
         assertThat(actual.equals("")).isTrue();
-    }
-
-    @Test
-    public void getLyricsTest() {
-        List<String> list = new ArrayList<>();
-        list.add(artist);
-        String actual = geniusClient.getLyrics(title, list);
-        System.out.println(actual);
-        assertThat(actual.length() > 0).isTrue();
     }
 
     @Test

@@ -1,19 +1,15 @@
 package com.saamba.api.config.clients;
 
-import com.saamba.api.dao.music.Song;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@TestPropertySource(locations = "/test.properties")
+@TestPropertySource(locations = "/application-test.properties")
 public class SpotifyClientTest extends SpotifyClient {
 
     @Value("${test.spotify.genre}")
