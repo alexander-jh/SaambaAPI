@@ -101,9 +101,6 @@ jobs:
           TWITTER_ACCESS_TOKEN: echo ${{ secrets.TWITTER_ACCESS_TOKEN }}
           TWITTER_ACCESS_SECRET: echo ${{ secrets.TWITTER_ACCESS_SECRET }}
         run: |
-          # Build a docker container and
-          # push it to ECR so that it can
-          # be deployed to ECS.
           docker build \
           -t $ECR_REGISTRY/$ECR_REPOSITORY=$IMAGE_TAG \
           --build-arg SPOTIFY_ACCESS_KEY='${SPOTIFY_ACCESS_KEY}' \
