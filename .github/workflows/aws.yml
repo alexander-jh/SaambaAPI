@@ -120,7 +120,8 @@ jobs:
           --build-arg=TWITTER_SECRET_KEY:$TWITTER_SECRET_KEY \
           --build-arg=TWITTER_BEARER_TOKEN:$TWITTER_BEARER_TOKEN \
           --build-arg=TWITTER_ACCESS_TOKEN:$TWITTER_ACCESS_TOKEN \
-          --build-arg=TWITTER_ACCESS_SECRET:$TWITTER_ACCESS_SECRET .
+          --build-arg=TWITTER_ACCESS_SECRET:$TWITTER_ACCESS_SECRET \
+          --no-cache .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
