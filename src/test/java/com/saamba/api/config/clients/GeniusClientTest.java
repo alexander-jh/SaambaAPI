@@ -59,15 +59,6 @@ public class GeniusClientTest {
     }
 
     @Test
-    public void getLyricsTest() {
-        List<String> list = new ArrayList<>();
-        list.add(artist);
-        String actual = geniusClient.getLyrics(title, list);
-        System.out.println(actual);
-        assertThat(actual.length() > 0).isFalse();
-    }
-
-    @Test
     public void getLyricsTestEmpty() {
         List<String> list = new ArrayList<>();
         String actual = geniusClient.getLyrics("", list);
