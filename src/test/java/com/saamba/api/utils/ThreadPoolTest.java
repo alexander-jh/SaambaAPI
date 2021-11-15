@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
-@TestPropertySource(locations = "/test.properties")
+@TestPropertySource(locations = "/application-test.properties")
 public class ThreadPoolTest {
 
     @Value("${test.utils.thread.max}")
