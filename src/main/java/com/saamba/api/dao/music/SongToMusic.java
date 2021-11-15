@@ -1,6 +1,7 @@
 package com.saamba.api.dao.music;
 
 import com.amazonaws.AbortedException;
+import com.amazonaws.SdkClientException;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.model.AmazonDynamoDBException;
@@ -32,6 +33,9 @@ public class SongToMusic {
     @Value("${client.spotify.thread.limit}")
     private int threadMax;
 
+    @Value("${client.dynamodb.attrmax}")
+    private int ddbAttributeMax;
+
     @Autowired
     private DynamoDBMapper dynamoDBMapper;
 
@@ -48,9 +52,9 @@ public class SongToMusic {
         try {
             Music music = Music.builder()
                     .genre(genre.getGenre())
-                    .uri(song.getURI())
+                    .uri(song.getUri())
                     .title(song.getTitle())
-                    .lyrics(song.getLyrics())
+                    .lyrics(reduceTo400KB(song.getLyrics()))
                     .hasLyrics(song.getLyrics().length() > 0)
                     .artists(song.getArtists())
                     .acousticness(song.getAcousticness())
@@ -77,7 +81,7 @@ public class SongToMusic {
      * @param genre - genre object
      */
     public void updateLyrics(Song song, Genre genre) {
-        Music music = getMusic(song.getURI(), genre.getGenre());
+        Music music = getMusic(song.getUri(), genre.getGenre());
         if(music != null && !music.getHasLyrics()) {
             music.setLyrics(song.getLyrics());
             music.setHasLyrics(true);
@@ -133,7 +137,11 @@ public class SongToMusic {
                 new DynamoDBQueryExpression<>();
         Music hashKeyValues = Music.builder().genre(g).build();
         query.setHashKeyValues(hashKeyValues);
-        return dynamoDBMapper.query(Music.class, query);
+        try {
+            return dynamoDBMapper.query(Music.class, query);
+        } catch(SdkClientException e) {
+            return null;
+        }
     }
 
     public void fillEmptyLyrics() {
@@ -152,12 +160,16 @@ public class SongToMusic {
                             .withExpressionAttributeValues(lyrics)
                             .withLimit(100)
                             .withConsistentRead(false);
-                    List<Music> noLyrics = dynamoDBMapper.query(Music.class, query);
-                    log.info("Updating lyrics for " + noLyrics.size() + " in genre " + g + ".");
-                    for(Music m : noLyrics) {
-                        m.setLyrics(geniusClient.getLyrics(m.getTitle(), m.getArtists()));
-                        m.setHasLyrics((m.getLyrics().length() > 0));
-                        dynamoDBMapper.save(m);
+                    try {
+                        List<Music> noLyrics = dynamoDBMapper.query(Music.class, query);
+                        log.info("Updating lyrics for " + noLyrics.size() + " in genre " + g + ".");
+                        for (Music m : noLyrics) {
+                            m.setLyrics(geniusClient.getLyrics(m.getTitle(), m.getArtists()));
+                            m.setHasLyrics((m.getLyrics().length() > 0));
+                            dynamoDBMapper.save(m);
+                        }
+                    }catch(AmazonDynamoDBException | AbortedException e) {
+                        log.error("Failed to update lyric status in " + g + ".");
                     }
                     log.info("Completed updating lyrics for " + g + ".");
                 });
@@ -169,4 +181,10 @@ public class SongToMusic {
         threadPool.stop();
         log.info("Thread pool terminated.");
     }
+
+    private String reduceTo400KB(String s) {
+        return (s.length() < ddbAttributeMax) ? s :
+                s.substring(0, ddbAttributeMax);
+    }
 }
+

@@ -12,10 +12,10 @@ public interface ClientConfig {
      * Gets enum type for client
      * @return      - enum of client type
      */
-    public ClientTypes getClientType();
+    ClientTypes getClientType();
 
     /**
      * Updates relevant credentials for each client.
      */
-    public void refreshCredentials();
+    void refreshCredentials();
 }

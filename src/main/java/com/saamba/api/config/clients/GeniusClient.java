@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -141,7 +142,12 @@ public class GeniusClient implements ClientConfig {
                 .build();
         Response response;
         try {
-            response = geniusClient.newCall(request).execute();
+            try {
+                response = geniusClient.newCall(request).execute();
+            } catch(InterruptedIOException e) {
+                log.error("okhttp3 returned a null response for " + title + ".");
+                return "";
+            }
             if(response.isSuccessful()) {
                 JSONObject json = new JSONObject(Objects.
                         requireNonNull(response.body()).string());
@@ -155,7 +161,7 @@ public class GeniusClient implements ClientConfig {
                     path = baseUrl + path;
                 }
             }
-        } catch(IOException | JSONException e) {
+        } catch(JSONException | IOException e) {
             log.error("Failed to retrieve API path for " + title
                     + " " + artists + ".", e);;
         }
@@ -173,7 +179,9 @@ public class GeniusClient implements ClientConfig {
         sb.append(apiHost).append(searchRequest).append(title);
         for(String str : artists)
             sb.append(" ").append(str);
-        return sb.toString().replaceAll(" ", "%20");
+        return sb.toString().replaceAll(" ", "%20")
+                .replaceAll("\\[", "")
+                .replaceAll("]", "");
     }
 
     @Override

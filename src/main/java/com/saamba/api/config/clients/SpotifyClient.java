@@ -6,13 +6,17 @@ import com.saamba.api.dao.music.Song;
 import com.saamba.api.enums.ClientTypes;
 
 import com.wrapper.spotify.SpotifyApi;
+import com.wrapper.spotify.enums.ModelObjectType;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 import com.wrapper.spotify.model_objects.credentials.AuthorizationCodeCredentials;
+import com.wrapper.spotify.model_objects.special.SearchResult;
 import com.wrapper.spotify.model_objects.specification.*;
 import com.wrapper.spotify.requests.data.browse.miscellaneous.GetAvailableGenreSeedsRequest;
 
+import com.wrapper.spotify.requests.data.search.SearchItemRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import org.apache.hc.core5.http.ParseException;
@@ -31,6 +35,7 @@ import java.util.*;
  */
 @Service
 @Slf4j
+@EnableScheduling
 public class SpotifyClient implements ClientConfig {
 
     @Value("${client.spotify.secretkey}")
@@ -38,6 +43,8 @@ public class SpotifyClient implements ClientConfig {
 
     @Value("${client.spotify.accesskey}")
     private String accessKey;
+
+    private final int refreshRate = 300000;
 
     @Value("${client.spotify.recommendation.limit}")
     private int recLimit;
@@ -70,7 +77,7 @@ public class SpotifyClient implements ClientConfig {
      * Cron expression to refresh credentials every 5 minutes.
      */
     @Override
-    @Scheduled(cron = "0/5?") // Every 5 minutes
+    @Scheduled(fixedRate = refreshRate) // Every 5 minutes
     public synchronized void refreshCredentials() {
         this.init();
         log.info("Spotify credentials renewed.");
@@ -129,7 +136,6 @@ public class SpotifyClient implements ClientConfig {
      * @return          - list of songs in a genre
      */
     public synchronized List<Song> getSongs(String genre) {
-        int songCount = 0;
         List<Song> songs = new ArrayList<>();
         try {
             // Get most popular songs in the genre
@@ -175,6 +181,23 @@ public class SpotifyClient implements ClientConfig {
             log.error("Failed to retrieve songs from Spotify.", e);
         }
         return songs;
+    }
+
+    public synchronized String searchSong(String song){
+        log.info("Query: " + song);
+        SearchItemRequest searchItemRequest = spotifyClient
+                .searchItem(song, ModelObjectType.TRACK.getType())
+                .build();
+        String uri = "";
+        try {
+            uri =  searchItemRequest.execute()
+                    .getTracks()
+                    .getItems()[0]
+                    .getUri();
+        } catch (IOException | SpotifyWebApiException | ArrayIndexOutOfBoundsException | ParseException e) {;
+            log.error("Error: " + e.getMessage());
+        }
+        return uri;
     }
 
     /**

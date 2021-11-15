@@ -1,6 +1,26 @@
 package com.saamba.api.enums;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class GenreConstants {
+
+    public static final String[] tones = new String[] {
+            "openness",
+            "anger",
+            "disgust",
+            "fear",
+            "sadness",
+            "joy",
+            "conscientiousness",
+            "extroversion",
+            "emotional range",
+            "analytical",
+            "confident",
+            "tentative",
+            "agreeableness"
+    };
+
     public static final String[] genres = new String[] {
             "edm",
             "reggae",

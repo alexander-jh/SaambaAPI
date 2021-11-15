@@ -6,13 +6,16 @@ import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ExpectedAttributeValue;
 import com.saamba.api.config.TwitterConfig;
 import com.saamba.api.config.clients.DiscoveryClient;
+import com.saamba.api.config.clients.SpotifyClient;
 import com.saamba.api.config.clients.ToneClient;
+import com.saamba.api.dao.music.Playlist;
 import com.saamba.api.entity.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,16 +37,26 @@ public class UserRepository {
     @Resource(name="tone")
     private ToneClient toneClient;
 
+    @Resource(name="spotify")
+    private SpotifyClient spotifyClient;
+
     /**
      * Returns a JSON string of a playlist from a user's twitter handle.
      * @param accountName   - string twitter handle passed in url
      * @return              - formatted JSON string of playlist
      */
-    public String getPlaylist(String accountName) {
-        String concept = twitterConfig.getConcepts(twitterConfig.tweetTexts(accountName));
-        String tone =  toneClient.getMaxTone(twitterConfig.tweetTexts(accountName)).toString();
-        return discoveryClient.findSongs(tone, concept);
-    }
+    public Playlist getPlaylist(String accountName) {
+        List<String> concepts = twitterConfig.getConcepts(twitterConfig.tweetTexts(accountName));
+        List<String> tones =  toneClient.getMaxTones(twitterConfig.tweetTexts(accountName));
+        List<String> followers = twitterConfig.getFollowingList(accountName);
+
+        //query using just top tone and one concept
+        List<String[]> songsAndArtists =  discoveryClient.findSongs(tones, concepts, followers);
+        String[] trackUris = searchSongs(songsAndArtists);
+        return new Playlist(trackUris, concepts, tones, followers);
+
+        }
+
 
     /**
      * Add a new user to the user table.
@@ -82,6 +95,23 @@ public class UserRepository {
     public String editUser(User user) {
         mapper.save(user, buildExpression(user));
         return "record updated ...";
+    }
+
+    public String[] searchSongs(List<String[]> songs){
+        String[] trackUris = new String[songs.size()];
+        int skips = 0;
+        for(int i = 0; i < songs.size(); i++) {
+            String uri = spotifyClient.searchSong(songs.get(i)[0] + ", " + songs.get(i)[1]);
+            if (uri.length() != 0)
+                trackUris[i - skips] = uri;
+            else
+                skips++;
+        }
+        return trackUris;
+    }
+
+    private void addSongToPlayist(String uri, String playlist){
+        // TODO
     }
 
     /**

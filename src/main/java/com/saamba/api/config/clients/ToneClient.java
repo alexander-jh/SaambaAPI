@@ -124,7 +124,8 @@ public class ToneClient implements ClientConfig {
         }
     }
 
-    public String getMaxTone(List<String> l){
+
+    public List<String> getMaxTones(List<String> l){
         Map<String, Double> mp = new HashMap<>();
         fillMap(mp);
         int i = 0;
@@ -141,16 +142,13 @@ public class ToneClient implements ClientConfig {
             }
             i++;
         }
-        String tone = "";
-        Double max = 0.0;
-        for(Map.Entry<String, Double> pair : mp.entrySet()) {
-            if(pair.getValue() > max) {
-                tone = pair.getKey();
-                max = pair.getValue();
-            }
+        List<Map.Entry<String, Double>> frequencyList = new ArrayList<Map.Entry<String, Double>>(mp.entrySet());
+        frequencyList.sort(Comparator.comparing(Map.Entry<String, Double>::getValue).reversed());
+        List<String> tones = new ArrayList<>();
+        for(Map.Entry<String, Double> entry : frequencyList) {
+            tones.add(entry.getKey());
         }
         // should return empty string if empty map
-        return tone;
+        return tones;
     }
-
 }
