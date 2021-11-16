@@ -2,6 +2,7 @@ package com.saamba.api.config.clients;
 
 import com.neovisionaries.i18n.CountryCode;
 import com.saamba.api.config.ClientConfig;
+import com.saamba.api.config.CredentialManager;
 import com.saamba.api.dao.music.Song;
 import com.saamba.api.enums.ClientTypes;
 
@@ -15,6 +16,7 @@ import com.wrapper.spotify.requests.data.browse.miscellaneous.GetAvailableGenreS
 
 import com.wrapper.spotify.requests.data.search.SearchItemRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -37,6 +39,9 @@ import java.util.*;
 @Slf4j
 @EnableScheduling
 public class SpotifyClient implements ClientConfig {
+
+    @Autowired
+    private CredentialManager creds;
 
     @Value("${client.spotify.secretkey}")
     private String secretKey;
@@ -94,6 +99,8 @@ public class SpotifyClient implements ClientConfig {
      */
     @PostConstruct
     public SpotifyClient init() {
+        this.secretKey = this.creds.getSecretValue(this.secretKey);
+        this.accessKey = this.creds.getSecretValue(this.accessKey);
         spotifyClient = new SpotifyApi.Builder()
                 .setClientId(accessKey)
                 .setClientSecret(secretKey)

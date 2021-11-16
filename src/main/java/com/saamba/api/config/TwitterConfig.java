@@ -12,6 +12,7 @@ import io.github.redouane59.twitter.signature.TwitterCredentials;
 
 import lombok.extern.slf4j.Slf4j;
 import opennlp.tools.tokenize.WhitespaceTokenizer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +23,9 @@ import java.util.*;
 @Component
 @Slf4j
 public class TwitterConfig implements ClientConfig {
+
+    @Autowired
+    private CredentialManager creds;
 
     @Value("${client.twitter.results.max}")
     private int maxResults;
@@ -53,6 +57,11 @@ public class TwitterConfig implements ClientConfig {
      */
     @PostConstruct
     public TwitterConfig init() {
+        this.accessKey = this.creds.getSecretValue(this.accessKey);
+        this.accessToken = this.creds.getSecretValue(this.accessToken);
+        this.secretKey = this.creds.getSecretValue(this.secretKey);
+        this.bearerToken = this.creds.getSecretValue(this.bearerToken);
+        this.accessTokenSecret = this.creds.getSecretValue(this.accessTokenSecret);
         this.twitterClient = new TwitterClient(
                 TwitterCredentials.builder().accessToken(accessToken)
                         .accessTokenSecret(accessTokenSecret)
