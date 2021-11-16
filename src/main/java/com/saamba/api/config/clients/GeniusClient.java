@@ -1,7 +1,6 @@
 package com.saamba.api.config.clients;
 
 import com.saamba.api.config.ClientConfig;
-import com.saamba.api.config.CredentialManager;
 import com.saamba.api.enums.ClientTypes;
 
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +13,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.safety.Whitelist;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.boot.configurationprocessor.json.JSONException;
@@ -36,9 +34,6 @@ import java.util.regex.Pattern;
 @Component
 @Slf4j
 public class GeniusClient implements ClientConfig {
-
-    @Autowired
-    private CredentialManager creds;
 
     @Value("${client.genius.api.search}")
     private String searchRequest;
@@ -67,7 +62,6 @@ public class GeniusClient implements ClientConfig {
      */
     @PostConstruct
     public GeniusClient init() {
-        this.accessToken = this.creds.getSecretValue(this.accessToken);
         geniusClient = new OkHttpClient()
                 .newBuilder()
                 .build();

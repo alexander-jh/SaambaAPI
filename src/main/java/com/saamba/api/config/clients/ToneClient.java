@@ -5,9 +5,7 @@ import com.ibm.watson.tone_analyzer.v3.ToneAnalyzer;
 import com.ibm.watson.tone_analyzer.v3.model.ToneOptions;
 import com.ibm.watson.tone_analyzer.v3.model.ToneScore;
 import com.saamba.api.config.ClientConfig;
-import com.saamba.api.config.CredentialManager;
 import com.saamba.api.enums.ClientTypes;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +14,6 @@ import java.util.*;
 
 @Service
 public class ToneClient implements ClientConfig {
-
-    @Autowired
-    private CredentialManager creds;
 
     @Value("${client.ibm.tone.key}")
     private String apiKey;
@@ -41,8 +36,6 @@ public class ToneClient implements ClientConfig {
      */
     @PostConstruct
     public ToneClient init() {
-        this.apiKey = this.creds.getSecretValue(this.apiKey);
-        this.apiUrl = this.creds.getSecretValue(this.apiUrl);
         this.toneAnalyzer = new ToneAnalyzer(apiDate,
                 new IamAuthenticator.Builder().apikey(apiKey).build());
         this.toneAnalyzer.setServiceUrl(apiUrl);

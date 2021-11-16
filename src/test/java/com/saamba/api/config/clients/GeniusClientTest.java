@@ -28,14 +28,14 @@ public class GeniusClientTest {
     @Autowired
     private GeniusClient geniusClient;
 
-//    @Test
-//    public void getUrlTest() {
-//        List<String> list = new ArrayList<>();
-//        list.add(artist);
-//        String expected = "https://api.genius.com/search?q=" + title + " " + artist;
-//        String actual = geniusClient.getUrl(title, list);
-//        assertThat(actual.equals(expected)).isFalse();
-//    }
+    @Test
+    public void getUrlTest() {
+        List<String> list = new ArrayList<>();
+        list.add(artist);
+        String expected = "https://api.genius.com/search?q=" + title + " " + artist;
+        String actual = geniusClient.getUrl(title, list);
+        assertThat(actual.equals(expected)).isFalse();
+    }
 
 //    @Test
 //    public void parseLyricsTest() {
@@ -44,16 +44,16 @@ public class GeniusClientTest {
 //        assertThat(actual.equals(expected)).isTrue();
 //    }
 
-//    @Test
-//    public void parseLyricsTestEmpty() {
-//        String actual = geniusClient.parseLyrics(path + "33333333");
-//        assertThat(actual.equals("")).isTrue();
-//    }
-//
-//    @Test
-//    public void getLyricsTestEmpty() {
-//        List<String> list = new ArrayList<>();
-//        String actual = geniusClient.getLyrics("", list);
-//        assertThat(actual.equals("")).isTrue();
-//    }
+    @Test
+    public void parseLyricsTestEmpty() {
+        String actual = geniusClient.parseLyrics(path + "33333333");
+        assertThat(actual.equals("")).isTrue();
+    }
+
+    @Test
+    public void getLyricsTestEmpty() {
+        List<String> list = new ArrayList<>();
+        String actual = geniusClient.getLyrics("", list);
+        assertThat(actual.equals("")).isTrue();
+    }
 }

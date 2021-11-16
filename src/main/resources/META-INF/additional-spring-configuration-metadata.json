@@ -279,20 +279,5 @@
       "name": "test.utils.task.max",
       "type": "java.lang.Integer",
       "description": "Description for test.utils.task.max."
-    },
-    {
-      "name": "spring.aws.secretsmanager.secretname",
-      "type": "java.lang.String",
-      "description": "Description for spring.aws.secretsmanager.secretname."
-    },
-    {
-      "name": "spring.aws.secretsmanager.endpoint",
-      "type": "java.lang.String",
-      "description": "Description for spring.aws.secretsmanager.endpoint."
-    },
-    {
-      "name": "spring.aws.secretsmanager.region",
-      "type": "java.lang.String",
-      "description": "Description for spring.aws.secretsmanager.region."
     }
   ] }
