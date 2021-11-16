@@ -8,20 +8,26 @@ import com.ibm.watson.discovery.v1.model.QueryOptions;
 import com.ibm.watson.discovery.v1.model.QueryResult;
 
 import com.saamba.api.config.ClientConfig;
+import com.saamba.api.config.CredentialManager;
 import com.saamba.api.enums.ClientTypes;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
 @Slf4j
 public class DiscoveryClient implements ClientConfig {
+
+    @Autowired
+    private CredentialManager creds;
 
     @Value("${client.ibm.discovery.key}")
     private String apiKey;
@@ -56,6 +62,10 @@ public class DiscoveryClient implements ClientConfig {
      */
     @PostConstruct
     public DiscoveryClient init() {
+        this.apiKey = this.creds.getSecretValue(this.apiKey);
+        this.apiUrl = this.creds.getSecretValue(this.apiUrl);
+        this.envId = this.creds.getSecretValue(this.envId);
+        this.collectionId = this.creds.getSecretValue(this.collectionId);
         this.discoveryClient = new Discovery(apiDate,
                 new IamAuthenticator.Builder()
                         .apikey(apiKey)

@@ -128,23 +128,6 @@ jobs:
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
-        env:
-          SPOTIFY_ACCESS_KEY: ${{ env.SPOTIFY_ACCESS_KEY }}
-          SPOTIFY_SECRET_KEY: ${{ env.SPOTIFY_SECRET_KEY }}
-          IBM_DISCOVERY_KEY: ${{ env.IBM_DISCOVERY_KEY }}
-          IBM_DISCOVERY_URL: ${{ env.IBM_DISCOVERY_URL }}
-          IBM_DISCOVERY_ENVID: ${{ env.IBM_DISCOVERY_ENVID }}
-          IBM_DISCOVERY_COLID: ${{ env.IBM_DISCOVERY_COLID }}
-          IBM_TONE_KEY: ${{ env.IBM_TONE_KEY }}
-          IBM_TONE_URL: ${{ env.IBM_TONE_URL }}
-          AWS_ACCESS_KEY: ${{ env.AWS_ACCESS_KEY }}
-          AWS_SECRET_KEY: ${{ env.AWS_SECRET_KEY }}
-          GENIUS_TOKEN: ${{ env.GENIUS_TOKEN }}
-          TWITTER_ACCESS_KEY: ${{ env.TWITTER_ACCESS_KEY }}
-          TWITTER_SECRET_KEY: ${{ env.TWITTER_SECRET_KEY }}
-          TWITTER_BEARER_TOKEN: ${{ env.TWITTER_BEARER_TOKEN }}
-          TWITTER_ACCESS_TOKEN: ${{ env.TWITTER_ACCESS_TOKEN }}
-          TWITTER_ACCESS_SECRET: ${{ env.TWITTER_ACCESS_SECRET }}
         with:
           task-definition: ${{ env.ECS_TASK_DEFINITION }}
           container-name: ${{ env.CONTAINER_NAME }}
@@ -152,23 +135,6 @@ jobs:
 
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-        env:
-          SPOTIFY_ACCESS_KEY: ${{ env.SPOTIFY_ACCESS_KEY }}
-          SPOTIFY_SECRET_KEY: ${{ env.SPOTIFY_SECRET_KEY }}
-          IBM_DISCOVERY_KEY: ${{ env.IBM_DISCOVERY_KEY }}
-          IBM_DISCOVERY_URL: ${{ env.IBM_DISCOVERY_URL }}
-          IBM_DISCOVERY_ENVID: ${{ env.IBM_DISCOVERY_ENVID }}
-          IBM_DISCOVERY_COLID: ${{ env.IBM_DISCOVERY_COLID }}
-          IBM_TONE_KEY: ${{ env.IBM_TONE_KEY }}
-          IBM_TONE_URL: ${{ env.IBM_TONE_URL }}
-          AWS_ACCESS_KEY: ${{ env.AWS_ACCESS_KEY }}
-          AWS_SECRET_KEY: ${{ env.AWS_SECRET_KEY }}
-          GENIUS_TOKEN: ${{ env.GENIUS_TOKEN }}
-          TWITTER_ACCESS_KEY: ${{ env.TWITTER_ACCESS_KEY }}
-          TWITTER_SECRET_KEY: ${{ env.TWITTER_SECRET_KEY }}
-          TWITTER_BEARER_TOKEN: ${{ env.TWITTER_BEARER_TOKEN }}
-          TWITTER_ACCESS_TOKEN: ${{ env.TWITTER_ACCESS_TOKEN }}
-          TWITTER_ACCESS_SECRET: ${{ env.TWITTER_ACCESS_SECRET }}
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
           service: ${{ env.ECS_SERVICE }}

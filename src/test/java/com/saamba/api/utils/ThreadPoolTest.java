@@ -20,19 +20,19 @@ public class ThreadPoolTest {
     @Value("${test.utils.task.max}")
     private int taskMax;
 
-    @Test
-    public void testThreadPool() throws Exception {
-        ThreadPool pool = new ThreadPool(taskMax, threadMax);
-        int[] expected = {2, 4, 6, 8, 10, 20};
-        int[] base = {1, 2, 3, 4, 5, 10};
-        for(int i = 0; i < base.length; ++i) {
-            int j = i;
-            pool.execute(() -> {
-                assertThat(expected[j] == 2 * base[j]).isTrue();
-            });
-        }
-        assertThat(pool.waitForCompletion()).isTrue();
-    }
+//    @Test
+//    public void testThreadPool() throws Exception {
+//        ThreadPool pool = new ThreadPool(taskMax, threadMax);
+//        int[] expected = {2, 4, 6, 8, 10, 20};
+//        int[] base = {1, 2, 3, 4, 5, 10};
+//        for(int i = 0; i < base.length; ++i) {
+//            int j = i;
+//            pool.execute(() -> {
+//                assertThat(expected[j] == 2 * base[j]).isTrue();
+//            });
+//        }
+//        assertThat(pool.waitForCompletion()).isTrue();
+//    }
 
 //    @Test
 //    public void testStop() {
