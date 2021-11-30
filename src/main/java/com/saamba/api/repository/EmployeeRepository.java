@@ -36,6 +36,18 @@ public class EmployeeRepository {
     private ToneClient toneClient;
 
     /**
+     * Pushes changes to an employee in the table. This is where the query logic to update results
+     * will go.
+     * @param employeeId- updated user object
+     * @return          - confirmation of update
+     */
+    public String updateEmployee(String employeeId) {
+        Employee employee = findEmployeeById(employeeId);
+        mapper.save(employee);
+        return "record updated ...";
+    }
+
+    /**
      * Add a new user to the user table.
      * @param employeeId- JPA entity of user
      * @param fname     - employee's first name
@@ -69,16 +81,6 @@ public class EmployeeRepository {
         return employeeId + " removed !!";
     }
 
-//    /**
-//     * Pushes changes to a user to the table.
-//     * @param user      - updated user object
-//     * @return          - confirmation of update
-//     */
-//    public String editUser(Employee employeeId) {
-//        mapper.save(user, buildExpression(user));
-//        return "record updated ...";
-//    }
-
     /**
      * Creates the DynamoDB save expression for updates to the user
      * object using DDB mapper.
@@ -88,7 +90,7 @@ public class EmployeeRepository {
     private DynamoDBSaveExpression buildExpression(Employee user) {
         DynamoDBSaveExpression dynamoDBSaveExpression = new DynamoDBSaveExpression();
         Map<String, ExpectedAttributeValue> expectedMap = new HashMap<>();
-        expectedMap.put("accountName", new ExpectedAttributeValue(new AttributeValue().withS(user.getEmployeeId())));
+        expectedMap.put("employeeId", new ExpectedAttributeValue(new AttributeValue().withS(user.getEmployeeId())));
         dynamoDBSaveExpression.setExpected(expectedMap);
         return dynamoDBSaveExpression;
     }

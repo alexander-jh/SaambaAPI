@@ -12,11 +12,6 @@ import javax.annotation.Resource;
 /**
  * I will consistently try to pool a working task list into this
  * centralized class.
- * TODO : Tie JUnit testing into GitHub workflow
- * TODO : Test cases for discovery client
- * TODO : Test cases for tone analyzer client
- * TODO : Test cases for twitter config
- * TODO : Test cases for user repo
  */
 @SpringBootApplication
 @RestController
@@ -45,11 +40,11 @@ public class SaambaApplication {
         return employeeRepo.deleteUser(employeeId);
     }
 
-//    @PutMapping("/editEmployee")
-//    public String updateUser(@RequestBody Employee employee) {
-//        log.info("Starting API call /editEmployee" + employee + ".");
-//        return employeeRepo.editUser(employee);
-//    }
+    @PutMapping("/updateEmployee/{employeeId}")
+    public String updateUser(@PathVariable String employeeId) {
+        log.info("Starting API call /editEmployee" + employeeId + ".");
+        return employeeRepo.updateEmployee(employeeId);
+    }
 
     /**
      * Entry point for application.
