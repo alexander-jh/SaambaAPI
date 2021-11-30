@@ -1,7 +1,7 @@
 package com.saamba.api;
 
 import com.saamba.api.repository.MusicRepository;
-import com.saamba.api.repository.UserRepository;
+import com.saamba.api.repository.EmployeeRepository;
 
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +14,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class SaambaApplicationTest {
 
 	@Autowired
-	private UserRepository userRepo;
+	private EmployeeRepository userRepo;
 
 	@Autowired
 	private MusicRepository musicRepo;

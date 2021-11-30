@@ -1,8 +1,6 @@
 package com.saamba.api.config;
 
-import com.saamba.api.config.clients.GeniusClient;
 import com.saamba.api.config.clients.DiscoveryClient;
-import com.saamba.api.config.clients.SpotifyClient;
 import com.saamba.api.config.clients.ToneClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;

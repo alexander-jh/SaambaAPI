@@ -1,8 +1,5 @@
 package com.saamba.api.config;
 
-import com.saamba.api.config.clients.GeniusClient;
-import com.saamba.api.config.clients.SpotifyClient;
-
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
