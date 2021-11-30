@@ -33,4 +33,7 @@ public class Employee {
 
     @DynamoDBAttribute(attributeName = "toneList")
     private List<Tone> toneList;
+
+    @DynamoDBAttribute(attributeName = "flaggedDocuments")
+    private List<Document> flaggedDocuments;
 }
