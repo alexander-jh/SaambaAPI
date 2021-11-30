@@ -15,7 +15,7 @@ public class Document {
     @DynamoDBAttribute(attributeName = "date")
     private String date;
 
-    @DynamoDBAttribute(attributeName = "test")
+    @DynamoDBAttribute(attributeName = "text")
     private String text;
 
 }
