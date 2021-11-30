@@ -124,7 +124,6 @@ public class ToneClient implements ClientConfig {
         }
     }
 
-
     public List<String> getMaxTones(List<String> l){
         Map<String, Double> mp = new HashMap<>();
         fillMap(mp);
