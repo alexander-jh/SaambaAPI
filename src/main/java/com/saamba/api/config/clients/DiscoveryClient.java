@@ -71,15 +71,15 @@ public class DiscoveryClient implements ClientConfig {
      *
      * @return          - uri reference to spotify song
      */
-    public List<String[]> findSongs(List<String> tones, List<String> concepts, List<String> followers) {
-        log.info("Starting query over Discovery collection for " + tones.toString() + ", " + concepts.toString() + ", " + followers.toString());
+    public List<String[]> findSongs(List<String> tones, List<String> concepts) {
+        log.info("Starting query over Discovery collection for " + tones.toString() + ", " + concepts.toString());
         QueryOptions.Builder queryBuilder = new QueryOptions.Builder(envId, collectionId);
         StringBuilder str = new StringBuilder();
-        for (String follower : followers) {
-            str.append("artist:\"");
-            str.append(follower);
-            str.append("\"^2|");
-        }
+//        for (String follower : followers) {
+//            str.append("artist:\"");
+//            str.append(follower);
+//            str.append("\"^2|");
+//        }
         str.append("title:\"");
         str.append(concepts.get(0));
         str.append("\"^2|");

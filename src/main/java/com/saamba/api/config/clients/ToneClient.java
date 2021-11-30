@@ -145,8 +145,13 @@ public class ToneClient implements ClientConfig {
         List<Map.Entry<String, Double>> frequencyList = new ArrayList<Map.Entry<String, Double>>(mp.entrySet());
         frequencyList.sort(Comparator.comparing(Map.Entry<String, Double>::getValue).reversed());
         List<String> tones = new ArrayList<>();
+        int toneCount = 0;
         for(Map.Entry<String, Double> entry : frequencyList) {
             tones.add(entry.getKey());
+            toneCount++;
+            if (toneCount == 3) {
+                break;
+            }
         }
         // should return empty string if empty map
         return tones;

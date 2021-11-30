@@ -52,8 +52,9 @@ public class UserRepository {
      */
     public String getPlaylist(String accountName) {
         try {
-            List<String> concepts = twitterConfig.getConcepts(twitterConfig.tweetTexts(accountName));
-            List<String> tones = toneClient.getMaxTones(twitterConfig.tweetTexts(accountName));
+            List<String> rawTweets = twitterConfig.tweetTexts(accountName);
+            List<String> concepts = twitterConfig.getConcepts(rawTweets);
+            List<String> tones = toneClient.getMaxTones(rawTweets);
             List<String> followers = twitterConfig.getFollowingList(accountName);
 
             //query using just top tone and one concept
