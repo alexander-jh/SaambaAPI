@@ -28,24 +28,12 @@ export AWS_ACCESS_KEY_ID=${ACCOUNT}
 export AWS_SECRET_ACCESS_KEY=${SECRET}
 export AWS_DEFAULT_REGION=${REGION}
 
-
 aws dynamodb create-table \
-    --table-name Music \
-    --attribute-definitions \
-        AttributeName=genre,AttributeType=S \
-        AttributeName=uri,AttributeType=S \
+    --table-name Employee \
     --key-schema \
-        AttributeName=genre,KeyType=HASH \
-        AttributeName=uri,KeyType=RANGE \
-    --provisioned-throughput \
-        ReadCapacityUnits=10,WriteCapacityUnits=5
-
-aws dynamodb create-table \
-    --table-name Users \
+        AttributeName=employeeId,KeyType=HASH \
     --attribute-definitions \
-        AttributeName=accountName,AttributeType=S \
-    --key-schema \
-        AttributeName=accountName,KeyType=HASH \
+        AttributeName=employeeId,AttributeType=S \
     --provisioned-throughput \
         ReadCapacityUnits=10,WriteCapacityUnits=5
 

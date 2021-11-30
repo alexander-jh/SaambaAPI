@@ -1,6 +1,5 @@
 package com.saamba.api;
 
-import com.saamba.api.repository.MusicRepository;
 import com.saamba.api.repository.EmployeeRepository;
 
 import org.junit.jupiter.api.Test;
@@ -16,17 +15,9 @@ public class SaambaApplicationTest {
 	@Autowired
 	private EmployeeRepository userRepo;
 
-	@Autowired
-	private MusicRepository musicRepo;
-
 	@Test
 	void userRepoLoads() throws Exception {
 		assertThat(userRepo).isNotNull();
-	}
-
-	@Test
-	void musicRepoLoads() throws Exception {
-		assertThat(musicRepo).isNotNull();
 	}
 
 }

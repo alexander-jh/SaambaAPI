@@ -17,12 +17,6 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 public class AppConfig {
 
-    @Bean("spotify")
-    public SpotifyClient spotifyAPI() {
-        log.info("SpotifyClient bean created.");
-        return new SpotifyClient();
-    }
-
     @Bean("discovery")
     public DiscoveryClient discoveryAPI() {
         log.info("DiscoveryClient bean created.");
@@ -39,17 +33,5 @@ public class AppConfig {
     public AWSConfig awsAPI() {
         log.info("AWSConfig bean created.");
         return new AWSConfig();
-    }
-
-    @Bean("genius")
-    public GeniusClient geniusAPI() {
-        log.info("GeniusClient bean created.");
-        return new GeniusClient();
-    }
-
-    @Bean("twitter")
-    public TwitterConfig twitterApi() {
-        log.info("TwitterConfig bean created.");
-        return new TwitterConfig();
     }
 }

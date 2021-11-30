@@ -31,9 +31,6 @@ public class Employee {
     @DynamoDBAttribute(attributeName = "disgruntledLikelihood")
     private double disgruntledLikelihood;
 
-    @DynamoDBAttribute(attributeName = "documentList")
-    private List<Document> documentList;
-
     @DynamoDBAttribute(attributeName = "toneList")
-    private List<Document> toneList;
+    private List<Tone> toneList;
 }

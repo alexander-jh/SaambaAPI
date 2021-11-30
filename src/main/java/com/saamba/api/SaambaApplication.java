@@ -1,6 +1,5 @@
 package com.saamba.api;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.saamba.api.entity.employee.Employee;
 import com.saamba.api.repository.EmployeeRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -24,44 +23,33 @@ import javax.annotation.Resource;
 @Slf4j
 public class SaambaApplication {
 
-    @Resource(name = "user")
-    private EmployeeRepository entityRepo;
+    @Resource(name = "employee")
+    private EmployeeRepository employeeRepo;
 
-    /**
-     * API end point which returns JSON string to caller via get request
-     * from a user's Twitter handle.
-     * @param employeeId   - string
-     * @return              - JSON string of spotify URI
-     */
-    @GetMapping("/getPlaylist/{accountName}")
-    public String getEvaluation(@PathVariable String employeeId) throws JsonProcessingException {
-        log.info("Starting API call /getPlaylist/" + employeeId);
-        return entityRepo.getPlaylist(employeeId);
+    @PostMapping("/addEmployee/{employeeId}/{fname}/{lname}")
+    public String addEmployee(@PathVariable String employeeId, @PathVariable String fname,
+                              @PathVariable String lname) {
+        log.info("Starting API call /addEmployee" + employeeId + " " + fname + " " + lname + ".");
+        return employeeRepo.addUser(employeeId, fname, lname);
     }
 
-    @PostMapping("/saveUser")
-    public Employee saveUser(@RequestBody Employee user) {
-        log.info("Starting API call /saveUser.");
-        return entityRepo.addUser(user);
+    @GetMapping("/findEmployee/{employeeId}")
+    public Employee findEmployee(@PathVariable String employeeId) {
+        log.info("Starting API call /findEmployee/" + employeeId);
+        return employeeRepo.findEmployeeById(employeeId);
     }
 
-    @GetMapping("/getUser/{accountName}")
-    public Employee findUser(@PathVariable String accountName) {
-        log.info("Starting API call /getUser/" + accountName);
-        return entityRepo.findUserByAccount(accountName);
+    @DeleteMapping("/deleteEmployee/{employeeId}")
+    public String deleteEmployee(@PathVariable String employeeId) {
+        log.info("Starting API call /deleteEmployee.");
+        return employeeRepo.deleteUser(employeeId);
     }
 
-    @DeleteMapping("/deleteUser")
-    public String deleteUser(@RequestBody Employee user) {
-        log.info("Starting API call /deleteUser.");
-        return entityRepo.deleteUser(user);
-    }
-
-    @PutMapping("/editUser")
-    public String updateUser(@RequestBody Employee user) {
-        log.info("Starting API call /editUser.");
-        return entityRepo.editUser(user);
-    }
+//    @PutMapping("/editEmployee")
+//    public String updateUser(@RequestBody Employee employee) {
+//        log.info("Starting API call /editEmployee" + employee + ".");
+//        return employeeRepo.editUser(employee);
+//    }
 
     /**
      * Entry point for application.
