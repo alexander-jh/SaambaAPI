@@ -34,6 +34,12 @@ public class SaambaApplication {
         return employeeRepo.findEmployeeById(employeeId);
     }
 
+    @GetMapping("/findWorstEmployees")
+    public String findEmployee() {
+        log.info("Starting API call /findWorstEmployees/");
+        return employeeRepo.findWorstEmployees();
+    }
+
     @DeleteMapping("/deleteEmployee/{employeeId}")
     public String deleteEmployee(@PathVariable String employeeId) {
         log.info("Starting API call /deleteEmployee.");

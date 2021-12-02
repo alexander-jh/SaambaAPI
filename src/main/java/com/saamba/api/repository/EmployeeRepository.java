@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saamba.api.config.clients.DiscoveryClient;
 import com.saamba.api.config.clients.ToneClient;
 import com.saamba.api.entity.employee.Employee;
+import com.saamba.api.enums.BlockList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -93,5 +94,17 @@ public class EmployeeRepository {
         expectedMap.put("employeeId", new ExpectedAttributeValue(new AttributeValue().withS(user.getEmployeeId())));
         dynamoDBSaveExpression.setExpected(expectedMap);
         return dynamoDBSaveExpression;
+    }
+
+    public String findWorstEmployees() {
+        return (new StringBuilder()).append("Harassment: ")
+            .append(discoveryClient.scanEmployees(BlockList.HARASSMENT).toString())
+            .append("\n")
+            .append("Disgruntled: ")
+            .append(discoveryClient.scanEmployees(BlockList.DISGRUNTLED).toString())
+            .append("\n")
+            .append("Theft: ")
+            .append(discoveryClient.scanEmployees(BlockList.THEFT).toString())
+            .toString();
     }
 }

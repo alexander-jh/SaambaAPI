@@ -67,56 +67,32 @@ public class DiscoveryClient implements ClientConfig {
     /**
      * Searches for song in discovery client based upon the seed query
      * string.
-     * @param tones      - string for query
+     * @param block      - string for query
      *
      * @return          - uri reference to spotify song
      */
-    public List<String[]> findSongs(List<String> tones, List<String> concepts) {
-        log.info("Starting query over Discovery collection for " + tones.toString() + ", " + concepts.toString());
-        QueryOptions.Builder queryBuilder = new QueryOptions.Builder(envId, collectionId);
-        StringBuilder str = new StringBuilder();
-//        for (String follower : followers) {
-//            str.append("artist:\"");
-//            str.append(follower);
-//            str.append("\"^2|");
-//        }
-        str.append("title:\"");
-        str.append(concepts.get(0));
-        str.append("\"^2|");
-        str.append("title:\"");
-        str.append(concepts.get(1));
-        str.append("\"^1.5|");
-        str.append("title:\"");
-        str.append(concepts.get(2));
-        str.append("\"^1|");
-        str.append("lyrics:\"");
-        str.append(concepts.get(0));
-        str.append("\"^2|");
-        str.append("lyrics:\"");
-        str.append(concepts.get(1));
-        str.append("\"^1.5|");
-        str.append("lyrics:\"");
-        str.append(concepts.get(2));
-        str.append("\"^1|");
-        str.append("tone::\"");
-        str.append(tones.get(0));
-        str.append("\"^2|");
-        str.append("tone::\"");
-        str.append(tones.get(1));
-        str.append("\"^1.5|");
-        str.append("tone::\"");
-        str.append(tones.get(2));
-        str.append("\"^1");
-        queryBuilder.query(str.toString());
-        QueryResponse queryResponse = discoveryClient.query(queryBuilder.build()).execute().getResult();
+    public List<String> scanEmployees(String[] block) {
+        log.info("Starting query " + buildQueryString(block) + " over Discovery collection.");
 
-        // Parses QueryResponse and puts Artist + Title in an ArrayList of Arrays [Artist, Title]
-        List<String[]> songs = new ArrayList<>();
-        List<QueryResult> results = queryResponse.getResults();
+        QueryResponse queryResponse = discoveryClient.query(
+                (new QueryOptions.Builder(envId, collectionId))
+                        .query(buildQueryString(block))
+                .build())
+                .execute()
+                .getResult();
 
-        for (QueryResult result : results) {
-            songs.add(new String[]{result.get("artist").toString(), result.get("title").toString()});
-        }
-        return songs;
+        List<String> employees = new ArrayList<>();
+
+        for(QueryResult result : queryResponse.getResults())
+            employees.add(result.get("employeeId").toString());
+
+        return employees;
+    }
+
+    private String buildQueryString(String[] list) {
+        StringBuilder query = new StringBuilder();
+        for(String s : list)
+            query.append(s).append(' ');
+        return query.toString();
     }
 }
