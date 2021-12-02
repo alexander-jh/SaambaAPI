@@ -83,9 +83,16 @@ public class DiscoveryClient implements ClientConfig {
 
         List<String> employees = new ArrayList<>();
 
-        for(QueryResult result : queryResponse.getResults())
+        for(QueryResult result : queryResponse.getResults()) {
             employees.add(result.get("employeeId").toString());
-
+            String  str = result.get("documents").toString();
+            for(String b: block){
+                int i = str.indexOf(b);
+                if(i!=-1 && i>25){
+                    log.info("Employee " + result.get("employeeId").toString() + ": " + str.substring(i-50, i+50));
+                }
+            }
+        }
         return employees;
     }
 
